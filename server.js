@@ -2,30 +2,38 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
 
+// Import Routes
 const adminRouter = require("./myrouters/admin.router");
+const teacherRouter = require("./myrouters/teacher.router");
+const studentRouter = require("./myrouters/student.router");
 
 const app = express();
+const PORT = process.env.PORT || 5000;
+
+const corsOptions = {
+  origin: "http://localhost:5173", // The frontend application URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, // Allow cookies to be sent
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(cookieParser());
 
-// MongoDB connection
+// Connect to MongoDB
 mongoose
-  .connect(`mongodb://127.0.0.1:27017/erisnStudentManagementSystem2024`)
-  .then(() => {
-    console.log("MongoDB is connected successfully.");
-  })
-  .catch((e) => {
-    console.error("MongoDB connection error:", e);
-  });
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
 
-//Routers
+// Use routes
 app.use("/api/admin", adminRouter);
+app.use("/api/teacher", teacherRouter);
+app.use("/api/student", studentRouter);
 
-const PORT = process.env.PORT || 3000;
+// Start server
 app.listen(PORT, () => {
-  console.log("Server is running at PORT=>", PORT);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
