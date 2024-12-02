@@ -22,6 +22,11 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+// Health check route
+app.get("/", (req, res) => {
+  res.json({ message: "API is up and running!" });
+});
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
