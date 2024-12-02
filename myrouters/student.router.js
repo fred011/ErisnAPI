@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Student = require("../Models/student.model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // POST request to register a student
 router.post("/register", async (req, res) => {

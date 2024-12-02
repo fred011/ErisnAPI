@@ -2,7 +2,7 @@ require("dotenv").config();
 const formidable = require("formidable"); // For handling form data, especially file uploads
 const path = require("path"); // For working with file paths
 const fs = require("fs"); // File system module
-const bcrypt = require("bcrypt"); // Corrected the typo here
+const bcrypt = require("bcryptjs"); // Corrected the typo here
 const jwt = require("jsonwebtoken"); // For generating and verifying JSON Web Tokens
 
 const School = require("../Models/school.model.js"); // School model

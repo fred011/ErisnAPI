@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Admin = require("../Models/admin.model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // POST request to register an admin (allow multiple admins)
 router.post("/register", async (req, res) => {

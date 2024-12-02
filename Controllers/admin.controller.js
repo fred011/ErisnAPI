@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt"); // For hashing passwords securely
+const bcrypt = require("bcryptjs"); // For hashing passwords securely
 const validator = require("validator"); // For email validation
 const Admin = require("../Models/admin.model.js"); // Import the Admin model
 
