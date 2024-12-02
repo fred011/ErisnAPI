@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: "http://localhost:5173", // The frontend application URL
+  origin: "https://erisn-sec-chance-program.vercel.app/ ", // The frontend application URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Allow cookies to be sent
