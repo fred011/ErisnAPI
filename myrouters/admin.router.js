@@ -62,5 +62,22 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+router.post("/logout", (req, res) => {
+  // If you're using sessions
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Logout failed" });
+      } else {
+        return res.status(200).json({ message: "Logged out successfully" });
+      }
+    });
+  } else {
+    // If you're using JWTs, just send a success response
+    res.status(200).json({ message: "Logged out successfully" });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;
