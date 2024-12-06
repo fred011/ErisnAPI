@@ -5,6 +5,12 @@ const bcrypt = require("bcryptjs");
 
 // POST request to register an admin (allow multiple admins)
 router.post("/register", async (req, res) => {
+  // Set the cookie
+  res.cookie("token", "your-jwt-token", {
+    httpOnly: true, // Prevent JavaScript access
+    secure: true, // Send cookie only over HTTPS
+    sameSite: "None", // Allow cross-site requests
+  });
   try {
     const { name, email, password } = req.body;
 
@@ -44,6 +50,12 @@ router.post("/register", async (req, res) => {
 });
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  // Set the cookie
+  res.cookie("token", "your-jwt-token", {
+    httpOnly: true, // Prevent JavaScript access
+    secure: true, // Send cookie only over HTTPS
+    sameSite: "None", // Allow cross-site requests
+  });
 
   try {
     const admin = await Admin.findOne({ email });
