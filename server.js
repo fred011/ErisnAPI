@@ -19,8 +19,18 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use(express.json());
+
+// Middleware to set a cookie with SameSite attribute
+app.use((req, res, next) => {
+  res.cookie("example_cookie", "cookie_value", {
+    httpOnly: true, // Protects against XSS
+    secure: true, // Ensures cookie is sent over HTTPS
+    sameSite: "None", // Ensures compatibility with cross-site requests
+    path: "/", // Cookie available across the entire app
+  });
+  next();
+});
 
 // Health check route
 app.get("/", (req, res) => {
