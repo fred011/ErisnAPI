@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
 
 // Import Routes
 const adminRouter = require("./myrouters/admin.router");
@@ -17,12 +16,10 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Allow cookies to be sent
-  exposedHeaders: "Authorization",
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser());
 
 // Middleware to set a cookie with SameSite attribute
 app.use((req, res, next) => {
