@@ -74,6 +74,5 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token", { path: "/" });
   res.status(200).json({ message: "Logged out successfully" });
 });
-router.get("/fetch-admin", authMiddleware(["ADMIN"]), getAdminData);
 
 module.exports = router;
