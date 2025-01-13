@@ -1,11 +1,9 @@
 const express = require("express");
-const authMiddleware = require("../Auth/auth");
+
 const router = express.Router();
 const Admin = require("../Models/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-const { getAdminData } = require("../Controllers/admin.controller");
 
 // POST request to register an admin
 router.post("/register", async (req, res) => {
