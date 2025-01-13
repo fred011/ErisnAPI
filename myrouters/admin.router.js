@@ -2,40 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Admin = require("../Models/admin.model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-// POST request to register an admin (allow multiple admins)
+// POST request to register an admin
 router.post("/register", async (req, res) => {
-  // Set the cookie
-  res.cookie("token", "your-jwt-token", {
-    httpOnly: true, // Prevent JavaScript access
-    secure: true, // Send cookie only over HTTPS
-    sameSite: "None", // Allow cross-site requests
-  });
   try {
     const { name, email, password } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    // Check if the email is already registered
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
       return res.status(409).json({ error: "Email is already registered" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new admin record
-    const newAdmin = new Admin({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    // Save the admin to the database
+    const newAdmin = new Admin({ name, email, password: hashedPassword });
     const savedAdmin = await newAdmin.save();
 
     res.status(201).json({
@@ -48,17 +32,13 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Failed to register admin" });
   }
 });
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  // Set the cookie
-  res.cookie("token", "your-jwt-token", {
-    httpOnly: true, // Prevent JavaScript access
-    secure: true, // Send cookie only over HTTPS
-    sameSite: "None", // Allow cross-site requests
-  });
 
+// POST request to log in an admin
+router.post("/login", async (req, res) => {
   try {
+    const { email, password } = req.body;
     const admin = await Admin.findOne({ email });
+
     if (!admin) {
       return res.status(404).json({ error: "Admin not found" });
     }
@@ -68,26 +48,28 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Optionally, set a cookie/session here
-    res.status(200).json({ message: "Login successful", admin });
+    const token = jwt.sign(
+      { id: admin._id, role: "ADMIN" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // Ensure secure cookies in production
+      sameSite: "None",
+    });
+
+    res.status(200).json({ success: true, message: "Login successful", token });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// POST request to log out an admin
 router.post("/logout", (req, res) => {
-  // If you're using sessions
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).json({ message: "Logout failed" });
-      } else {
-        return res.status(200).json({ message: "Logged out successfully" });
-      }
-    });
-  } else {
-    // If you're using JWTs, just send a success response
-    res.status(200).json({ message: "Logged out successfully" });
-  }
+  res.clearCookie("token", { path: "/" });
+  res.status(200).json({ message: "Logged out successfully" });
 });
 
 module.exports = router;

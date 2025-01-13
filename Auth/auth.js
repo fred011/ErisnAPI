@@ -6,21 +6,26 @@ const authMiddleware = (roles = []) => {
       const token = req.header("Authorization")?.replace("Bearer ", "");
 
       if (!token) {
-        res
+        return res
           .status(401)
-          .json({ success: false, message: "No token, Authorization denied." });
+          .json({ success: false, message: "No token provided." });
       }
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded) {
-        req.user = decoded;
-        if (roles.length > 0 && !roles.includes(req.user.role)) {
-          return res
-            .status(403)
-            .json({ success: false, message: "Access Denied." });
-        }
-        next();
+      req.user = decoded;
+
+      if (roles.length > 0 && !roles.includes(req.user.role)) {
+        return res
+          .status(403)
+          .json({ success: false, message: "Access denied." });
       }
-    } catch (error) {}
+
+      next();
+    } catch (error) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid token." });
+    }
   };
 };
 
