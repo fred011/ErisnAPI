@@ -54,5 +54,5 @@ app.use("/api/student", studentRouter);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`API is running live`);
 });
