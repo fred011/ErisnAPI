@@ -15,7 +15,7 @@ const corsOptions = {
   origin: "https://erisn-sec-chance-program.vercel.app", // The frontend application URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["Authorization"],
+
   credentials: true, // Allow cookies to be sent
 };
 
