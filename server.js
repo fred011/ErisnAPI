@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser"); // Add cookie parser for better cookie handling
 
 // Import Routes
 const adminRouter = require("./myrouters/admin.router");
@@ -12,16 +13,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // CORS Configuration
-const corsOptions = {
-  origin: [process.env.FRONTEND_URL, "http://localhost:3000"], // Add localhost for development
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true, // Allow cookies to be sent
-};
+app.use(
+  cors({
+    origin: "https://erisn-sec-chance-program.vercel.app", // Replace with your frontend's URL
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Explicitly list headers
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  })
+);
 
-// Middleware
-app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser()); // Parse cookies from requests
 
 // Middleware to set a cookie with SameSite attribute
 app.use((req, res, next) => {
@@ -29,10 +31,22 @@ app.use((req, res, next) => {
   res.cookie("example_cookie", "cookie_value", {
     httpOnly: true,
     secure: isSecure, // Secure cookie in production
-    sameSite: "None", // Cross-site requests allowed
+    sameSite: isSecure ? "None" : "Lax", // Cross-site requests allowed in production
     path: "/",
   });
   next();
+});
+
+// Handle Preflight Requests for Complex CORS
+app.options("*", (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://erisn-sec-chance-program.vercel.app"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
 });
 
 // Health check route
