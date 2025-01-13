@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser"); // Add cookie parser for better c
 const adminRouter = require("./myrouters/admin.router");
 const teacherRouter = require("./myrouters/teacher.router");
 const studentRouter = require("./myrouters/student.router");
+const classRouter = require("./myrouters/class.router");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -64,6 +65,7 @@ mongoose
 app.use("/api/admin", adminRouter);
 app.use("/api/teacher", teacherRouter);
 app.use("/api/student", studentRouter);
+app.use("/api/class", classRouter);
 
 // Start server
 app.listen(PORT, () => {
