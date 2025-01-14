@@ -1,5 +1,4 @@
 const express = require("express");
-const authMiddleware = require("../Auth/auth");
 
 const {
   createSubject,
@@ -10,9 +9,9 @@ const {
 
 const router = express.Router();
 
-router.post("/create", authMiddleware(["ADMIN"]), createSubject);
-router.get("/all", authMiddleware(["ADMIN"]), getAllSubjects);
-router.patch("/update/:id", authMiddleware(["ADMIN"]), updateSubjectWithId);
-router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteSubjectWithId);
+router.post("/create", createSubject);
+router.get("/all", getAllSubjects);
+router.patch("/update/:id", updateSubjectWithId);
+router.delete("/delete/:id", deleteSubjectWithId);
 
 module.exports = router;
