@@ -1,5 +1,5 @@
 const express = require("express");
-const authMiddleware = require("../Auth/auth");
+
 const router = express.Router();
 const Student = require("../Models/student.model");
 const bcrypt = require("bcryptjs");
@@ -14,7 +14,16 @@ const {
 // POST request to register a student
 router.post("/register", async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const {
+      email,
+      name,
+      student_class,
+      age,
+      gender,
+      guardian,
+      guardian_phone,
+      password,
+    } = req.body;
 
     // Validate input
     if (!email || !name || !password) {
