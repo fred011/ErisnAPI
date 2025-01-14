@@ -22,20 +22,32 @@ module.exports = {
   },
   createSubject: async (req, res) => {
     try {
+      const { subject_name, subject_codename } = req.body;
+
+      if (!subject_name || !subject_codename) {
+        return res.status(400).json({
+          success: false,
+          message: "Subject name and codename are required",
+        });
+      }
+
       const newSubject = new Subject({
-        Subject_name: req.body.subject_name,
-        subject_codename: req.body.subject_codename,
+        Subject_name: subject_name,
+        subject_codename: subject_codename,
       });
+
       await newSubject.save();
       res
         .status(200)
         .json({ success: true, message: "Subject Created Successfully" });
     } catch (error) {
+      console.log("Create Subject Error => ", error);
       res
         .status(500)
         .json({ success: false, message: "Server error in Creating Subject" });
     }
   },
+
   updateSubjectWithId: async (req, res) => {
     try {
       let id = req.params.id;
