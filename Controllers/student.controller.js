@@ -7,7 +7,16 @@ const Student = require("../Models/student.model");
  */
 const registerStudent = async (req, res) => {
   try {
-    const { email, name, student_class, age, gender, password } = req.body;
+    const {
+      name,
+      email,
+      student_class,
+      age,
+      gender,
+      guardian,
+      guardian_phone,
+      password,
+    } = req.body;
 
     const existingStudent = await Student.findOne({ email });
     if (existingStudent) {
@@ -18,13 +27,13 @@ const registerStudent = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newStudent = new Student({
-      email: fields.email[0],
-      name: fields.name[0],
-      student_class: fields.student_class[0],
-      age: fields.age[0],
-      gender: fields.gender[0],
-      guardian: fields.guardian[0],
-      guardian_phone: fields.guardian_phone[0],
+      email: email,
+      name: name,
+      student_class: student_class,
+      age: age,
+      gender: gender,
+      guardian: guardian,
+      guardian_phone: guardian_phone,
       password: hashedPassword,
     });
 
