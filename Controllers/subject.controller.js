@@ -32,7 +32,7 @@ module.exports = {
       }
 
       const newSubject = new Subject({
-        Subject_name: subject_name,
+        subject_name: subject_name,
         subject_codename: subject_codename,
       });
 
