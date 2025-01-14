@@ -34,6 +34,11 @@ router.post("/register", async (req, res) => {
     const newStudent = new Student({
       email,
       name,
+      student_class,
+      age,
+      gender,
+      guardian,
+      guardian_phone,
 
       password: hashedPassword,
     });
