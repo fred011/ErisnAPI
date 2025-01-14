@@ -1,7 +1,15 @@
 const express = require("express");
+const authMiddleware = require("../Auth/auth");
 const router = express.Router();
 const Student = require("../Models/student.model");
 const bcrypt = require("bcryptjs");
+const {
+  getStudentsWithQuery,
+  updateStudentData,
+  getStudentOwnData,
+  getStudentWithId,
+  deleteStudentWithId,
+} = require("../Controllers/student.controller");
 
 // POST request to register a student
 router.post("/register", async (req, res) => {
@@ -64,5 +72,11 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+router.get("/all", authMiddleware(["ADMIN"]), getStudentsWithQuery);
+router.patch("/update", authMiddleware(["ADMIN"]), updateStudentData);
+router.get("/fetch-single", authMiddleware(["STUDENT"]), getStudentOwnData);
+router.get("/fetch/:id", authMiddleware(["ADMIN"]), getStudentWithId);
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteStudentWithId);
 
 module.exports = router;

@@ -6,10 +6,11 @@ const studentSchema = new mongoose.Schema({
 
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  // student_class: { type: String, required: true },
-  // age: { type: String, required: true },
-  // gender: { type: String, required: true },
-  // student_image: { type: String, required: true },
+  student_class: { type: String, required: true },
+  age: { type: String, required: true },
+  gender: { type: String, required: true },
+  guardian: { type: String, required: true },
+  guardian_phone: { type: String, required: true },
   password: { type: String, required: true },
 
   createAt: { type: Date, default: new Date() },

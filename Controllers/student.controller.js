@@ -7,8 +7,7 @@ const Student = require("../Models/student.model");
  */
 const registerStudent = async (req, res) => {
   try {
-    const { email, name, student_class, age, gender, student_image, password } =
-      req.body;
+    const { email, name, student_class, age, gender, password } = req.body;
 
     const existingStudent = await Student.findOne({ email });
     if (existingStudent) {
@@ -19,12 +18,13 @@ const registerStudent = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newStudent = new Student({
-      email,
-      name,
-      //   student_class,
-      //   age,
-      //   gender,
-      //   student_image,
+      email: fields.email[0],
+      name: fields.name[0],
+      student_class: fields.student_class[0],
+      age: fields.age[0],
+      gender: fields.gender[0],
+      guardian: fields.guardian[0],
+      guardian_phone: fields.guardian_phone[0],
       password: hashedPassword,
     });
 
@@ -81,8 +81,152 @@ const loginStudent = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
+const getStudentsWithQuery = async (req, res) => {
+  try {
+    const filterQuery = {};
+    if (req.query.hasOwnProperty("search")) {
+      filterQuery["name"] = { $regex: req.query.search, $options: "i" };
+    }
+    if (req.query.hasOwnProperty("student_class")) {
+      filterQuery["student_class"] = req.query.student_class;
+    }
+    const students = await Student.find(filterQuery).select("-password"); // Exclude sensitive fields
+    res.status(200).json({
+      success: true,
+      message: "Successfully fetched all students",
+      students,
+    });
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error [STUDENT DATA].",
+    });
+  }
+};
+const getStudentOwnData = async (req, res) => {
+  try {
+    const student = await Student.findOne({}).select("-password"); // Fetch admin data excluding the password
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student data not found.",
+      });
+    }
+    res.status(200).json({ success: true, admin });
+  } catch (error) {
+    console.error("Error fetching student  data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+const updateStudentData = async (req, res) => {
+  try {
+    const student = await Student.findOne(); // Fetch the only admin record
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found.",
+      });
+    }
+
+    // Destructure and update the provided fields
+    const {
+      name,
+      email,
+      password,
+      student_class,
+      age,
+      gender,
+      guardian,
+      guardian_phone,
+    } = req.body;
+    if (name) student.name = name;
+    if (email) student.email = email;
+    if (student_class) student.student_class = student_class;
+    if (age) student.age = age;
+    if (gender) student.gender = gender;
+    if (guardian) student.guardian = guardian;
+    if (guardian_phone) student.guardian_phone = guardian_phone;
+    if (password) {
+      const salt = await bcrypt.genSalt(10); // Generate a new salt
+      student.password = await bcrypt.hash(password, salt); // Hash the updated password
+    }
+
+    // Save the updated student record
+    const updatedStudent = await student.save();
+    res.status(200).json({
+      success: true,
+      message: "Student data updated successfully.",
+      student: updatedStudent,
+    });
+  } catch (error) {
+    console.error("Error updating student data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update student data.",
+    });
+  }
+};
+
+const deleteStudentWithId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedStudent = await Student.findByIdAndDelete(id);
+
+    if (!deletedStudent) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found.",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Student deleted successfully.",
+      student: deletedStudent,
+    });
+  } catch (error) {
+    console.error("Error deleting student:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete student.",
+    });
+  }
+};
+const getStudentWithId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const student = await Student.findById(id).select("-password"); // Exclude sensitive fields
+
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Student fetched successfully.",
+      student,
+    });
+  } catch (error) {
+    console.error("Error fetching student:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch student.",
+    });
+  }
+};
 
 module.exports = {
   registerStudent,
   loginStudent,
+  getStudentsWithQuery,
+  getStudentOwnData,
+  updateStudentData,
+  deleteStudentWithId,
+  getStudentWithId,
 };

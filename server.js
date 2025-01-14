@@ -9,6 +9,7 @@ const adminRouter = require("./myrouters/admin.router");
 const teacherRouter = require("./myrouters/teacher.router");
 const studentRouter = require("./myrouters/student.router");
 const classRouter = require("./myrouters/class.router");
+const subjectRouter = require("./myrouters/subject.router");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -69,6 +70,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api/teacher", teacherRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/class", classRouter);
+app.use("/api/subject", subjectRouter);
 
 // Start server
 app.listen(PORT, () => {

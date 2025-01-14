@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const examinationSchema = new mongoose.Schema({
   // school: { type: mongoose.Schema.ObjectId, ref: "Erisn Africa" },
   examDate: { type: Date, required: true },
-  course: { type: mongoose.Schema.ObjectId, ref: "Course" },
+  subject: { type: mongoose.Schema.ObjectId, ref: "Subject" },
   examType: { type: String, required: true },
   class: { type: mongoose.Schema.ObjectId, ref: "Class" },
 
