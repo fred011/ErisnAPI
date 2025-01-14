@@ -73,10 +73,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/all", authMiddleware(["ADMIN"]), getStudentsWithQuery);
-router.patch("/update", authMiddleware(["ADMIN"]), updateStudentData);
-router.get("/fetch-single", authMiddleware(["STUDENT"]), getStudentOwnData);
-router.get("/fetch/:id", authMiddleware(["ADMIN"]), getStudentWithId);
-router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteStudentWithId);
+router.get("/all", getStudentsWithQuery);
+router.patch("/update", updateStudentData);
+router.get("/fetch-single", getStudentOwnData);
+router.get("/fetch/:id", getStudentWithId);
+router.delete("/delete/:id", deleteStudentWithId);
 
 module.exports = router;
