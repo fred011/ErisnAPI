@@ -87,7 +87,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/all", getStudentsWithQuery);
+router.get("/fetch-with-query", getStudentsWithQuery);
 router.patch("/update", updateStudentData);
 router.get("/fetch-single", getStudentOwnData);
 router.get("/fetch/:id", getStudentWithId);

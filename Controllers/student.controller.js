@@ -97,9 +97,11 @@ const getStudentsWithQuery = async (req, res) => {
       filterQuery["name"] = { $regex: req.query.search, $options: "i" };
     }
     if (req.query.hasOwnProperty("student_class")) {
+      console.log("Student class", req.query.student_class);
       filterQuery["student_class"] = req.query.student_class;
     }
-    const students = await Student.find(filterQuery).select("-password"); // Exclude sensitive fields
+    const students = await Student.find(filterQuery).populate("student_class");
+
     res.status(200).json({
       success: true,
       message: "Successfully fetched all students",
