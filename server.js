@@ -17,10 +17,10 @@ const PORT = process.env.PORT || 5000;
 // CORS Configuration
 app.use(
   cors({
-    origin: "https://erisn-sec-chance-program.vercel.app", // Replace with your frontend's URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Explicitly list headers
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: "https://erisn-sec-chance-program.vercel.app", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Methods allowed
+    allowedHeaders: ["Content-Type", "Authorization"], // Headers allowed
+    credentials: true, // Allow credentials
   })
 );
 
