@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/fetch-with-query", getStudentsWithQuery);
-router.patch("/update", updateStudentData);
+router.patch("/update/:id", updateStudentData);
 router.get("/fetch-single", getStudentOwnData);
 router.get("/fetch/:id", getStudentWithId);
 router.delete("/delete/:id", deleteStudentWithId);

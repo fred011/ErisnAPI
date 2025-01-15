@@ -135,7 +135,8 @@ const getStudentOwnData = async (req, res) => {
 };
 const updateStudentData = async (req, res) => {
   try {
-    const student = await Student.findOne(); // Fetch the only admin record
+    const id = req.params.id;
+    const student = await Student.findOne({ _id: id }); // Fetch the only admin record
     if (!student) {
       return res.status(404).json({
         success: false,
@@ -164,6 +165,7 @@ const updateStudentData = async (req, res) => {
     if (password) {
       const salt = await bcrypt.genSalt(10); // Generate a new salt
       student.password = await bcrypt.hash(password, salt); // Hash the updated password
+      student["password"] = student.password;
     }
 
     // Save the updated student record
