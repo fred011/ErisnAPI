@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs"); // For hashing passwords securely
 const validator = require("validator"); // For email validation
-const Admin = require("../Models/admin.model.js"); // Import the Admin model
+const Admin = require("../Models/admin.model."); // Import the Admin model
 
 module.exports = {
   /**
@@ -184,9 +184,9 @@ module.exports = {
     }
   },
   getAdminOwnData: async (req, res) => {
-    const { id } = req.params; // Extract ID from the URL
+    const id = req.params.id;
     try {
-      const admin = await Admin.findById(id).select("name -_id");
+      const admin = await Admin.findOne({ _id: id }).select("name -_id");
       if (!admin) {
         return res
           .status(404)
