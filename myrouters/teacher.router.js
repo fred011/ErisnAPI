@@ -3,11 +3,19 @@ const router = express.Router();
 const Teacher = require("../Models/teacher.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const {
+  getTeachersWithQuery,
+  getTeacherOwnData,
+  updateTeacherData,
+  deleteTeacherWithId,
+  getTeacherWithId,
+} = require("../Controllers/teacher.controller");
 
 // POST request to register a teacher
 router.post("/register", async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, qualification, age, phone_number, gender, password } =
+      req.body;
 
     // Validate input
     if (!email || !name || !password) {
@@ -27,6 +35,10 @@ router.post("/register", async (req, res) => {
     const newTeacher = new Teacher({
       email,
       name,
+      qualification,
+      age,
+      phone_number,
+      gender,
       password: hashedPassword,
     });
 
@@ -72,6 +84,7 @@ router.post("/login", async (req, res) => {
     // Send the response with the token
     res.status(200).json({
       message: "Login successful",
+      teacher,
       token: token, // Send token to the client
     });
   } catch (err) {
@@ -81,5 +94,11 @@ router.post("/login", async (req, res) => {
       .json({ error: "Internal server error", details: err.message });
   }
 });
+
+router.get("/fetch-with-query", getTeachersWithQuery);
+router.patch("/update/:id", updateTeacherData);
+router.get("/fetch-single", getTeacherOwnData);
+router.get("/fetch/:id", getTeacherWithId);
+router.delete("/delete/:id", deleteTeacherWithId);
 
 module.exports = router;
