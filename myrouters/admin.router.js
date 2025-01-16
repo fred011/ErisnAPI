@@ -4,7 +4,6 @@ const router = express.Router();
 const Admin = require("../Models/admin.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { getLoggedInAdminName } = require("../Controllers/admin.controller");
 
 // POST request to register an admin
 router.post("/register", async (req, res) => {
@@ -73,7 +72,5 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token", { path: "/" });
   res.status(200).json({ message: "Logged out successfully" });
 });
-
-router.get("/admin/name", getLoggedInAdminName);
 
 module.exports = router;

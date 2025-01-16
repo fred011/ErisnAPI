@@ -183,26 +183,4 @@ module.exports = {
       });
     }
   },
-  getLoggedInAdminName: async (req, res) => {
-    try {
-      // Assuming the admin's ID is stored in req.user.id after authentication
-      const adminId = req.user.id;
-
-      console.log("Fetching admin details for ID:", adminId);
-
-      // Find the admin in the database using the ID
-      const admin = await Admin.findById(adminId);
-
-      if (!admin) {
-        console.log("Admin not found");
-        return res.status(404).json({ message: "Admin not found" });
-      }
-
-      console.log("Admin fetched successfully:", admin.name);
-      res.status(200).json({ name: admin.name });
-    } catch (error) {
-      console.error("Error fetching admin name:", error);
-      res.status(500).json({ message: "Server error", error: error.message });
-    }
-  },
 };
