@@ -74,6 +74,6 @@ router.post("/logout", (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-router.get("/fetch-single", getAdminOwnData);
+router.get("/fetch-single/id", getAdminOwnData);
 
 module.exports = router;
