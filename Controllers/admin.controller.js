@@ -183,4 +183,23 @@ module.exports = {
       });
     }
   },
+  getAdminOwnData: async (req, res) => {
+    try {
+      const adminId = req.admin.id; // Assuming the admin ID is stored in req.admin
+      const admin = await Admin.findById(adminId).select("name -_id"); // Fetch only the name of the logged-in admin
+      if (!admin) {
+        return res.status(404).json({
+          success: false,
+          message: "Admin data not found.",
+        });
+      }
+      res.status(200).json({ success: true, admin });
+    } catch (error) {
+      console.error("Error fetching admin data:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error.",
+      });
+    }
+  },
 };
