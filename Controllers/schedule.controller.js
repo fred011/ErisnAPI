@@ -5,7 +5,7 @@ const Exam = require("../Models/examination.model");
 module.exports = {
   getScheduleWithClass: async (req, res) => {
     try {
-      const classId = reg.params.id;
+      const classId = req.params.id;
       const schedules = await Schedule.find({ class: classId });
       res.status(200).json({
         success: true,
@@ -29,13 +29,25 @@ module.exports = {
         startTime: req.body.startTime,
         endTime: req.body.endTime,
       });
-
+      if (
+        !req.body.teacher ||
+        !req.body.subject ||
+        !req.body.selectedClass ||
+        !req.body.startTime ||
+        !req.body.endTime
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Missing required fields: teacher, subject, selectedClass, startTime, endTime",
+        });
+      }
       await newSchedule.save();
       res
         .status(200)
         .json({ success: true, message: "Schedule Created Successfully" });
     } catch (error) {
-      console.log("Create Schedule Error => ", error);
+      console.log("Create Schedule Error => ", error.message, error.stack);
       res
         .status(500)
         .json({ success: false, message: "Server error in Creating Schedule" });
