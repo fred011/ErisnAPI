@@ -11,7 +11,7 @@ module.exports = {
       const schedules = await Schedule.find({ class: classId });
       res.status(200).json({
         success: true,
-        message: "Successfully fetched all Schedules ",
+        message: "Successfully fetched all Schedules",
         data: schedules,
       });
     } catch (error) {
@@ -47,6 +47,24 @@ module.exports = {
         return res.status(404).json({
           success: false,
           message: "Subject not found.",
+        });
+      }
+
+      // Validate the teacher existence
+      const teacherExists = await Teacher.findById(teacher);
+      if (!teacherExists) {
+        return res.status(404).json({
+          success: false,
+          message: "Teacher not found.",
+        });
+      }
+
+      // Validate the class existence
+      const classExists = await Class.findById(selectedClass);
+      if (!classExists) {
+        return res.status(404).json({
+          success: false,
+          message: "Class not found.",
         });
       }
 
@@ -87,24 +105,28 @@ module.exports = {
       });
     } catch (error) {
       console.log("Update Schedule Error => ", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Server error in Updating Schedule" });
+      res.status(500).json({
+        success: false,
+        message: "Server error in Updating Schedule",
+      });
     }
   },
+
   deleteScheduleWithId: async (req, res) => {
     try {
       let id = req.params.id;
 
       await Schedule.findByIdAndDelete({ _id: id });
-      res
-        .status(200)
-        .json({ success: true, message: "Schedule Deleted Successfully" });
+      res.status(200).json({
+        success: true,
+        message: "Schedule Deleted Successfully",
+      });
     } catch (error) {
       console.log("Delete Schedule Error => ", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Server error in Deleting Schedule" });
+      res.status(500).json({
+        success: false,
+        message: "Server error in Deleting Schedule",
+      });
     }
   },
 };
