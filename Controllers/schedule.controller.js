@@ -1,9 +1,7 @@
 const Schedule = require("../Models/subject.model");
-const Class = require("../Models/class.model");
+const Exam = require("../Models/exam.model");
 const Student = require("../Models/student.model");
-const Exam = require("../Models/examination.model");
 const Subject = require("../Models/subject.model");
-const Teacher = require("../Models/teacher.model");
 
 module.exports = {
   getScheduleWithClass: async (req, res) => {
@@ -25,31 +23,6 @@ module.exports = {
   },
   createSchedule: async (req, res) => {
     try {
-      if (
-        !req.body.teacher ||
-        !req.body.subject ||
-        !req.body.selectedClass ||
-        !req.body.startTime ||
-        !req.body.endTime
-      ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Missing required fields: teacher, subject, selectedClass, startTime, endTime",
-        });
-      }
-      // Validate referenced data
-      const teacherExists = await Teacher.findById(req.body.teacher);
-      const subjectExists = await Subject.findById(req.body.subject);
-      const classExists = await Class.findById(req.body.selectedClass);
-
-      if (!teacherExists || !subjectExists || !classExists) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid reference: Teacher, Subject, or Class not found",
-        });
-      }
-
       // Create new schedule
       const newSchedule = new Schedule({
         teacher: req.body.teacher,
