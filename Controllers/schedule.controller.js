@@ -36,7 +36,7 @@ module.exports = {
       if (!subjectExists) {
         return res.status(400).json({
           success: false,
-          message: "Invalid subject ID: Subject not found",
+          message: "Subject not found",
         });
       }
 
