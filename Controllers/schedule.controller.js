@@ -1,4 +1,5 @@
 const Schedule = require("../Models/subject.model");
+const Class = require("../Models/class.model");
 const Student = require("../Models/student.model");
 const Exam = require("../Models/examination.model");
 const Subject = require("../Models/subject.model");
