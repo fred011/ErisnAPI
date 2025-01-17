@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ScheduleSchema = new mongoose.Schema({
+const scheduleSchema = new mongoose.Schema({
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Teacher",
@@ -18,4 +18,4 @@ const ScheduleSchema = new mongoose.Schema({
   createdAt: { type: Date, default: new Date() },
 });
 
-module.exports = mongoose.model("Schedule", ScheduleSchema);
+module.exports = mongoose.model("Schedule", scheduleSchema);
