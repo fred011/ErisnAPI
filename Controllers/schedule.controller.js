@@ -23,14 +23,6 @@ module.exports = {
   },
   createSchedule: async (req, res) => {
     try {
-      const newSchedule = new Schedule({
-        teacher: req.body.teacher,
-        subject: req.body.subject,
-        class: req.body.selectedClass,
-        startTime: req.body.startTime,
-        endTime: req.body.endTime,
-      });
-      console.log("Request Body: ", req.body);
       if (
         !req.body.teacher ||
         !req.body.subject ||
@@ -44,6 +36,26 @@ module.exports = {
             "Missing required fields: teacher, subject, selectedClass, startTime, endTime",
         });
       }
+      // Validate referenced data
+      const teacherExists = await Teacher.findById(req.body.teacher);
+      const subjectExists = await Subject.findById(req.body.subject);
+      const classExists = await Class.findById(req.body.selectedClass);
+
+      if (!teacherExists || !subjectExists || !classExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid reference: Teacher, Subject, or Class not found",
+        });
+      }
+
+      // Create new schedule
+      const newSchedule = new Schedule({
+        teacher: req.body.teacher,
+        subject: req.body.subject,
+        class: req.body.selectedClass,
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
+      });
       await newSchedule.save();
       res
         .status(200)
