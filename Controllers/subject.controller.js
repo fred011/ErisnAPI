@@ -2,7 +2,7 @@ const Subject = require("../Models/subject.model").default;
 
 const Student = require("../Models/student.model");
 const Exam = require("../Models/examination.model");
-const Schedule = require("../Models/schedule.model").default;
+const Schedule = require("../Models/schedule.model");
 
 module.exports = {
   getAllSubjects: async (req, res) => {
