@@ -1,9 +1,9 @@
-import { Router } from "express";
+const express = require("express");
 
-const router = Router();
-import Admin from "../Models/admin.model";
-import { hash, compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+const router = express.Router();
+const Admin = require("../Models/admin.model");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // POST request to register an admin
 router.post("/register", async (req, res) => {
@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
       return res.status(409).json({ error: "Email is already registered" });
     }
 
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newAdmin = new Admin({ name, email, password: hashedPassword });
     const savedAdmin = await newAdmin.save();
 
@@ -44,12 +44,12 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ error: "Admin not found" });
     }
 
-    const isMatch = await compare(password, admin.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = sign(
+    const token = jwt.sign(
       { id: admin._id, role: "ADMIN" },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -73,4 +73,4 @@ router.post("/logout", (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-export default router;
+module.exports = router;

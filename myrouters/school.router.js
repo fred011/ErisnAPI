@@ -1,14 +1,14 @@
-import { Router } from "express";
-import authMiddleware from "../Auth/auth";
-import {
+const express = require("express");
+const authMiddleware = require("../Auth/auth");
+const {
   registerSchool,
   getAllSchools,
   loginSchool,
   updateSchool,
   getSchoolOwnData,
-} from "../Controllers/school.controller";
+} = require("../Controllers/school.controller");
 
-const router = Router();
+const router = express.Router();
 
 router.post("/register", registerSchool);
 router.get("/all", getAllSchools);
@@ -16,4 +16,4 @@ router.get("/login", loginSchool);
 router.patch("/update", authMiddleware(["SCHOOL"]), updateSchool);
 router.get("/fetch-single", authMiddleware(["SCHOOL"]), getSchoolOwnData);
 
-export default router;
+module.exports = router;

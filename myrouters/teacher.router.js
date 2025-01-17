@@ -1,15 +1,15 @@
-import { Router } from "express";
-const router = Router();
-import Teacher from "../Models/teacher.model";
-import { hash, compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
-import {
+const express = require("express");
+const router = express.Router();
+const Teacher = require("../Models/teacher.model");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const {
   getTeachersWithQuery,
   getTeacherOwnData,
   updateTeacherData,
   deleteTeacherWithId,
   getTeacherWithId,
-} from "../Controllers/teacher.controller";
+} = require("../Controllers/teacher.controller");
 
 // POST request to register a teacher
 router.post("/register", async (req, res) => {
@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
     }
 
     // Hash the password
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new teacher record
     const newTeacher = new Teacher({
@@ -69,13 +69,13 @@ router.post("/login", async (req, res) => {
     }
 
     // Compare password with the hashed password stored in the DB
-    const isMatch = await compare(password, teacher.password);
+    const isMatch = await bcrypt.compare(password, teacher.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     // Generate JWT token for the authenticated teacher
-    const token = sign(
+    const token = jwt.sign(
       { id: teacher._id, email: teacher.email },
       process.env.JWT_SECRET, // Make sure to set JWT_SECRET in your environment variables
       { expiresIn: "1h" } // Token expires in 1 hour
@@ -101,4 +101,4 @@ router.get("/fetch-single", getTeacherOwnData);
 router.get("/fetch/:id", getTeacherWithId);
 router.delete("/delete/:id", deleteTeacherWithId);
 
-export default router;
+module.exports = router;

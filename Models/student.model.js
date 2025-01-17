@@ -1,12 +1,12 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const studentSchema = new Schema({
+const studentSchema = new mongoose.Schema({
   // Reference to the school (if needed in the future)
   // school: { type: mongoose.Schema.ObjectId, ref: "Erisn Africa" },
 
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  student_class: { type: Schema.ObjectId, ref: "Class" },
+  student_class: { type: mongoose.Schema.ObjectId, ref: "Class" },
   age: { type: String, required: true },
   gender: { type: String, required: true },
   guardian: { type: String, required: true },
@@ -16,4 +16,4 @@ const studentSchema = new Schema({
   createAt: { type: Date, default: new Date() },
 });
 
-export default model("Student", studentSchema);
+module.exports = mongoose.model("Student", studentSchema);

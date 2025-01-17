@@ -1,16 +1,16 @@
 require("dotenv").config();
-import express, { json } from "express";
-import cors from "cors";
-import { connect } from "mongoose";
-import cookieParser from "cookie-parser"; // Add cookie parser for better cookie handling
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser"); // Add cookie parser for better cookie handling
 
 // Import Routes
-import adminRouter from "./myrouters/admin.router";
-import teacherRouter from "./myrouters/teacher.router";
-import studentRouter from "./myrouters/student.router";
-import classRouter from "./myrouters/class.router";
-import subjectRouter from "./myrouters/subject.router";
-import scheduleRouter from "./myrouters/schedule.router";
+const adminRouter = require("./myrouters/admin.router");
+const teacherRouter = require("./myrouters/teacher.router");
+const studentRouter = require("./myrouters/student.router");
+const classRouter = require("./myrouters/class.router");
+const subjectRouter = require("./myrouters/subject.router");
+const scheduleRouter = require("./myrouters/schedule.router");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-app.use(json());
+app.use(express.json());
 app.use(cookieParser()); // Parse cookies from requests
 
 // Middleware to set a cookie with SameSite attribute
@@ -61,7 +61,8 @@ app.get("/", (req, res) => {
 });
 
 // Connect to MongoDB
-connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
 

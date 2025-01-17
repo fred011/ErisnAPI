@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const attendanceSchema = new Schema({
+const attendanceSchema = new mongoose.Schema({
   // school: { type: mongoose.Schema.ObjectId, ref: "Erisn Africa" },
-  student: { type: Schema.ObjectId, ref: "Student" },
-  class: { type: Schema.ObjectId, ref: "Class" },
+  student: { type: mongoose.Schema.ObjectId, ref: "Student" },
+  class: { type: mongoose.Schema.ObjectId, ref: "Class" },
   date: { type: Date, required: true },
   status: { type: String, enum: ["Present", "Absent"], default: "Absent" },
 
   createdAt: { type: Date, default: new Date() },
 });
 
-export default model("Attendance", attendanceSchema);
+module.exports = mongoose.model("Attendance", attendanceSchema);

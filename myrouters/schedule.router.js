@@ -1,17 +1,17 @@
-import { Router } from "express";
+const express = require("express");
 
-import {
+const {
   createSchedule,
   getScheduleWithClass,
   updateScheduleWithId,
   deleteScheduleWithId,
-} from "../Controllers/schedule.controller";
+} = require("../Controllers/schedule.controller");
 
-const router = Router();
+const router = express.Router();
 
 router.post("/create", createSchedule);
 router.get("/fetch-with-class/:id", getScheduleWithClass);
 router.patch("/update/:id", updateScheduleWithId);
 router.delete("/delete/:id", deleteScheduleWithId);
 
-export default router;
+module.exports = router;
