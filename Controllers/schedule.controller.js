@@ -2,6 +2,7 @@ const Schedule = require("../Models/subject.model");
 const Student = require("../Models/student.model");
 const Exam = require("../Models/examination.model");
 const Subject = require("../Models/subject.model");
+const Teacher = require("../Models/teacher.model");
 
 module.exports = {
   getScheduleWithClass: async (req, res) => {
