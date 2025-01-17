@@ -1,20 +1,25 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const Teacher = require("../Models/teacher.model");
+import { hash, compare, genSalt } from "bcryptjs";
+import { sign } from "jsonwebtoken";
+import Teacher, {
+  findOne,
+  find,
+  findByIdAndDelete,
+  findById,
+} from "../Models/teacher.model";
 
 const registerTeacher = async (req, res) => {
   try {
     const { email, name, qualification, age, phone_number, gender, password } =
       req.body;
 
-    const existingTeacher = await Teacher.findOne({ email });
+    const existingTeacher = await findOne({ email });
     if (existingTeacher) {
       return res
         .status(409)
         .json({ success: false, message: "Email already registered." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hash(password, 10);
     const newTeacher = new Teacher({
       email: email,
       name: name,
@@ -42,21 +47,21 @@ const registerTeacher = async (req, res) => {
 const loginTeacher = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const teacher = await Teacher.findOne({ email });
+    const teacher = await findOne({ email });
     if (!teacher) {
       return res
         .status(404)
         .json({ success: false, message: "Teacher not found." });
     }
 
-    const isMatch = await bcrypt.compare(password, teacher.password);
+    const isMatch = await compare(password, teacher.password);
     if (!isMatch) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid credentials." });
     }
 
-    const token = jwt.sign(
+    const token = sign(
       { id: teacher._id, role: "TEACHER" },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -85,7 +90,7 @@ const getTeachersWithQuery = async (req, res) => {
     //   console.log("Teacher class", req.query.qualification);
     //   filterQuery["qualification"] = req.query.qualification;
     // }
-    const teachers = await Teacher.find(filterQuery);
+    const teachers = await find(filterQuery);
 
     res.status(200).json({
       success: true,
@@ -102,7 +107,7 @@ const getTeachersWithQuery = async (req, res) => {
 };
 const getTeacherOwnData = async (req, res) => {
   try {
-    const teacher = await Teacher.findOne({}).select("-password"); // Fetch admin data excluding the password
+    const teacher = await findOne({}).select("-password"); // Fetch admin data excluding the password
     if (!teacher) {
       return res.status(404).json({
         success: false,
@@ -121,7 +126,7 @@ const getTeacherOwnData = async (req, res) => {
 const updateTeacherData = async (req, res) => {
   try {
     const id = req.params.id;
-    const teacher = await Teacher.findOne({ _id: id }); // Fetch the only admin record
+    const teacher = await findOne({ _id: id }); // Fetch the only admin record
     if (!teacher) {
       return res.status(404).json({
         success: false,
@@ -140,8 +145,8 @@ const updateTeacherData = async (req, res) => {
     if (phone_number) teacher.phone_number = phone_number;
 
     if (password) {
-      const salt = await bcrypt.genSalt(10); // Generate a new salt
-      teacher.password = await bcrypt.hash(password, salt); // Hash the updated password
+      const salt = await genSalt(10); // Generate a new salt
+      teacher.password = await hash(password, salt); // Hash the updated password
       teacher["password"] = teacher.password;
     }
 
@@ -164,7 +169,7 @@ const updateTeacherData = async (req, res) => {
 const deleteTeacherWithId = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedTeacher = await Teacher.findByIdAndDelete(id);
+    const deletedTeacher = await findByIdAndDelete(id);
 
     if (!deletedTeacher) {
       return res.status(404).json({
@@ -188,7 +193,7 @@ const deleteTeacherWithId = async (req, res) => {
 const getTeacherWithId = async (req, res) => {
   try {
     const { id } = req.params;
-    const teacher = await Teacher.findById(id).select("-password"); // Exclude sensitive fields
+    const teacher = await findById(id).select("-password"); // Exclude sensitive fields
 
     if (!teacher) {
       return res.status(404).json({
@@ -211,7 +216,7 @@ const getTeacherWithId = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   registerTeacher,
   loginTeacher,
   getTeachersWithQuery,

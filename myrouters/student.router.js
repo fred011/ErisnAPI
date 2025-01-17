@@ -1,15 +1,15 @@
-const express = require("express");
+import { Router } from "express";
 
-const router = express.Router();
-const Student = require("../Models/student.model");
-const bcrypt = require("bcryptjs");
-const {
+const router = Router();
+import Student from "../Models/student.model";
+import { hash, compare } from "bcryptjs";
+import {
   getStudentsWithQuery,
   updateStudentData,
   getStudentOwnData,
   getStudentWithId,
   deleteStudentWithId,
-} = require("../Controllers/student.controller");
+} from "../Controllers/student.controller";
 
 // POST request to register a student
 router.post("/register", async (req, res) => {
@@ -37,7 +37,7 @@ router.post("/register", async (req, res) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hash(password, 10);
 
     // Create a new student record
     const newStudent = new Student({
@@ -76,7 +76,7 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ error: "Student not found" });
     }
 
-    const isMatch = await bcrypt.compare(password, student.password);
+    const isMatch = await compare(password, student.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
@@ -101,4 +101,4 @@ router.get("/fetch-single", getStudentOwnData);
 router.get("/fetch/:id", getStudentWithId);
 router.delete("/delete/:id", deleteStudentWithId);
 
-module.exports = router;
+export default router;

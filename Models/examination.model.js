@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const examinationSchema = new mongoose.Schema({
+const examinationSchema = new Schema({
   // school: { type: mongoose.Schema.ObjectId, ref: "Erisn Africa" },
   examDate: { type: Date, required: true },
-  subject: { type: mongoose.Schema.ObjectId, ref: "Subject" },
+  subject: { type: Schema.ObjectId, ref: "Subject" },
   examType: { type: String, required: true },
-  class: { type: mongoose.Schema.ObjectId, ref: "Class" },
+  class: { type: Schema.ObjectId, ref: "Class" },
 
   createdAt: { type: Date, default: new Date() },
 });
 
-module.exports = mongoose.model("Examination", examinationSchema);
+export default model("Examination", examinationSchema);

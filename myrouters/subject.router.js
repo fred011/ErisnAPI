@@ -1,17 +1,17 @@
-const express = require("express");
+import { Router } from "express";
 
-const {
+import {
   createSubject,
   getAllSubjects,
   updateSubjectWithId,
   deleteSubjectWithId,
-} = require("../Controllers/subject.controller");
+} from "../Controllers/subject.controller";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/create", createSubject);
 router.get("/all", getAllSubjects);
 router.patch("/update/:id", updateSubjectWithId);
 router.delete("/delete/:id", deleteSubjectWithId);
 
-module.exports = router;
+export default router;
