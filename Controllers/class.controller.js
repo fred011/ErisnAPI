@@ -2,7 +2,7 @@ const Class = require("../Models/class.model");
 
 const Student = require("../Models/student.model");
 const Exam = require("../Models/examination.model");
-const Schedule = require("../Models/schedule.model");
+const Schedule = require("../Models/schedule.model").default;
 
 module.exports = {
   getAllClasses: async (req, res) => {

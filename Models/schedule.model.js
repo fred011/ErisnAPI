@@ -1,21 +1,21 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const scheduleSchema = new mongoose.Schema({
+const scheduleSchema = new Schema({
   teacher: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: "Teacher",
     required: true,
   },
   subject: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: "Subject",
     required: true,
   },
-  class: { type: mongoose.Schema.ObjectId, ref: "Class", required: true },
+  class: { type: Schema.ObjectId, ref: "Class", required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
 
   createdAt: { type: Date, default: new Date() },
 });
 
-module.exports = mongoose.model("Schedule", scheduleSchema);
+export default model("Schedule", scheduleSchema);

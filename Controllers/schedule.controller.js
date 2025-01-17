@@ -1,7 +1,7 @@
-const Schedule = require("../Models/subject.model");
+const Schedule = require("../Models/subject.model").default;
 const Exam = require("../Models/examination.model");
 const Student = require("../Models/student.model");
-const Subject = require("../Models/subject.model");
+const Subject = require("../Models/subject.model").default;
 
 module.exports = {
   getScheduleWithClass: async (req, res) => {
@@ -23,7 +23,8 @@ module.exports = {
   },
   createSchedule: async (req, res) => {
     try {
-      // Create new schedule
+      console.log("Request Body:", req.body);
+
       const newSchedule = new Schedule({
         teacher: req.body.teacher,
         subject: req.body.subject,
@@ -32,23 +33,17 @@ module.exports = {
         endTime: req.body.endTime,
       });
 
-      const subjectExists = await Subject.findById(req.body.subject);
-      if (!subjectExists) {
-        return res.status(400).json({
-          success: false,
-          message: "Subject not found",
-        });
-      }
-
       await newSchedule.save();
       res
         .status(200)
         .json({ success: true, message: "Schedule Created Successfully" });
     } catch (error) {
-      console.log("Create Schedule Error => ", error.message, error.stack);
-      res
-        .status(500)
-        .json({ success: false, message: "Server error in Creating Schedule" });
+      console.error("Create Schedule Error =>", error.message);
+      console.error("Full Error =>", error);
+      res.status(500).json({
+        success: false,
+        message: `Error: ${error.message}`,
+      });
     }
   },
 
