@@ -31,6 +31,15 @@ module.exports = {
         startTime: req.body.startTime,
         endTime: req.body.endTime,
       });
+
+      const subjectExists = await Subject.findById(req.body.subject);
+      if (!subjectExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid subject ID: Subject not found",
+        });
+      }
+
       await newSchedule.save();
       res
         .status(200)
