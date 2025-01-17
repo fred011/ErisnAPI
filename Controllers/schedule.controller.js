@@ -1,5 +1,5 @@
 const Schedule = require("../Models/subject.model");
-const Exam = require("../Models/exam.model");
+const Exam = require("../Models/examination.model");
 const Student = require("../Models/student.model");
 const Subject = require("../Models/subject.model");
 
