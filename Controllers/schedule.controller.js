@@ -22,25 +22,56 @@ module.exports = {
       });
     }
   },
+
   createSchedule: async (req, res) => {
     try {
-      // Create new schedule
+      const {
+        teacher,
+        subject,
+        class: selectedClass,
+        startTime,
+        endTime,
+      } = req.body;
+
+      // Validate inputs
+      if (!teacher || !subject || !selectedClass || !startTime || !endTime) {
+        return res.status(400).json({
+          success: false,
+          message: "All fields are required to create a schedule.",
+        });
+      }
+
+      // Validate the subject existence
+      const subjectExists = await Subject.findById(subject);
+      if (!subjectExists) {
+        return res.status(404).json({
+          success: false,
+          message: "Subject not found.",
+        });
+      }
+
+      // Create a new schedule entry
       const newSchedule = new Schedule({
-        teacher: req.body.teacher,
-        subject: req.body.subject,
-        class: req.body.selectedClass,
-        startTime: req.body.startTime,
-        endTime: req.body.endTime,
+        teacher,
+        subject,
+        class: selectedClass,
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
       });
+
       await newSchedule.save();
-      res
-        .status(200)
-        .json({ success: true, message: "Schedule Created Successfully" });
+
+      return res.status(200).json({
+        success: true,
+        message: "Schedule created successfully!",
+        data: newSchedule,
+      });
     } catch (error) {
-      console.log("Create Schedule Error => ", error.message, error.stack);
-      res
-        .status(500)
-        .json({ success: false, message: "Server error in Creating Schedule" });
+      console.error("Create Schedule Error => ", error.message, error.stack);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while creating the schedule.",
+      });
     }
   },
 
