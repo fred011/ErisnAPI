@@ -29,6 +29,7 @@ module.exports = {
         startTime: req.body.startTime,
         endTime: req.body.endTime,
       });
+      console.log("Request Body: ", req.body);
       if (
         !req.body.teacher ||
         !req.body.subject ||
