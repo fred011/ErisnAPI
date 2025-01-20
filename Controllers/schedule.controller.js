@@ -32,9 +32,20 @@ module.exports = {
     try {
       const classId = req.params.id;
       console.log("Received classId in request:", classId);
-      const schedules = await Schedule.find({ class: classId }).populate(
-        "class"
-      );
+
+      // Ensure classId is an ObjectId if it isn't already
+      const objectClassId = mongoose.Types.ObjectId(classId);
+
+      const schedules = await Schedule.find({
+        classId: objectClassId,
+      }).populate("classId");
+
+      if (!schedules.length) {
+        return res
+          .status(404)
+          .json({ message: "No schedules found for this class." });
+      }
+
       console.log("Fetched schedules:", schedules);
       res.status(200).json({
         success: true,
