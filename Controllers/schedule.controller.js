@@ -33,7 +33,7 @@ module.exports = {
     try {
       const classId = req.params.id;
       const schedules = await Schedule.find({ class: classId });
-      res.status(200).lson({
+      res.status(200).json({
         success: true,
         message: "Success in fetching all events.",
         data: schedules,
