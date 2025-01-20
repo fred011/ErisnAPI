@@ -41,7 +41,7 @@ module.exports = {
 
       const schedules = await Schedule.find({
         classId: new mongoose.Types.ObjectId(classId),
-      }).populate("classId");
+      }).populate("classId", "teacher", "subject");
       console.log("Fetched schedules:", schedules);
 
       if (!schedules.length) {
