@@ -41,7 +41,10 @@ module.exports = {
 
       const schedules = await Schedule.find({
         classId: new mongoose.Types.ObjectId(classId),
-      }).populate("classId", "teacher", "subject");
+      })
+        .populate("classId") // Populates classId
+        .populate("teacher") // Populates teacher
+        .populate("subject"); // Populates subject
       console.log("Fetched schedules:", schedules);
 
       if (!schedules.length) {
@@ -63,7 +66,6 @@ module.exports = {
         .json({ message: "Server Error in retrieving schedules", error });
     }
   },
-
   // Update a schedule by ID
   updateScheduleWithId: async (req, res) => {
     try {
