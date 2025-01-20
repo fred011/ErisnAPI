@@ -31,9 +31,11 @@ module.exports = {
   getScheduleWithClass: async (req, res) => {
     try {
       const classId = req.params.id;
+      console.log("Received classId in request:", classId);
       const schedules = await Schedule.find({ class: classId }).populate(
-        "class"
+        "Class"
       );
+      console.log("Fetched schedules:", schedules);
       res.status(200).json({
         success: true,
         message: "Success in fetching all events.",
