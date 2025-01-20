@@ -47,12 +47,12 @@ module.exports = {
         .populate("subject"); // Populates subject
       console.log("Fetched schedules:", schedules);
 
-      if (!schedules.length) {
-        console.log("No schedules found for class:", classId);
-        return res
-          .status(404)
-          .json({ message: "No schedules found for this class." });
-      }
+      // if (!schedules.length) {
+      //   console.log("No schedules found for class:", classId);
+      //   return res
+      //     .status(404)
+      //     .json({ message: "No schedules found for this class." });
+      // }
 
       res.status(200).json({
         success: true,
