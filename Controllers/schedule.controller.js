@@ -33,7 +33,7 @@ module.exports = {
       const classId = req.params.id;
       console.log("Received classId in request:", classId);
       const schedules = await Schedule.find({ class: classId }).populate(
-        "Class"
+        "class"
       );
       console.log("Fetched schedules:", schedules);
       res.status(200).json({
