@@ -32,10 +32,10 @@ module.exports = {
   getScheduleWithClass: async (req, res) => {
     try {
       const classId = req.params.id;
-      console.log("Class ID from request:", classId);
+      console.log("Received classId:", classId);
 
       const schedules = await Schedule.find({ classId }).populate("classId");
-      console.log("Query Result:", schedules);
+      console.log("Fetched schedules:", schedules);
 
       if (!schedules.length) {
         console.log("No schedules found for class:", classId);
