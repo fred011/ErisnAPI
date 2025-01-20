@@ -29,7 +29,6 @@ module.exports = {
 
   // Get schedule by class
   getScheduleWithClass: async (req, res) => {
-    console.log(req.params.id);
     try {
       const classId = req.params.id;
       const schedules = await Schedule.find({ class: classId });
