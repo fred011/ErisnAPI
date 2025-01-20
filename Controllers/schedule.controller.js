@@ -1,5 +1,7 @@
 const Schedule = require("../Models/schedule.model"); // Assuming Schedule model is defined
-const Class = require("../Models/class.model"); // Assuming Class model is defined
+const Class = require("../Models/class.model");
+const Student = require("../Models/student.model");
+const Exam = require("../Models/examination.model");
 
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
@@ -28,13 +30,11 @@ exports.getScheduleWithClass = async (req, res) => {
   try {
     const classId = req.params.id;
     const schedules = await Schedule.find({ class: classId });
-    res
-      .status(200)
-      .lson({
-        success: true,
-        message: "Success in fetching all events.",
-        data: schedules,
-      });
+    res.status(200).lson({
+      success: true,
+      message: "Success in fetching all events.",
+      data: schedules,
+    });
   } catch (error) {
     console.log("Server Error in retrieving schedules", error);
     res
