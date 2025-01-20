@@ -66,6 +66,26 @@ module.exports = {
         .json({ message: "Server Error in retrieving schedules", error });
     }
   },
+
+  fetchScheduleWithId: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const schedule = (await Schedule.find({ _id: id }))[0];
+
+      res.status(200).json({
+        success: true,
+        message: "Schedule retrieved successfully.",
+        data: schedule,
+      });
+    } catch (error) {
+      console.error("Error in fetching schedule:", error);
+      res
+        .status(500)
+        .json({ message: "Server Error in retrieving schedule", error });
+    }
+  },
+
   // Update a schedule by ID
   updateScheduleWithId: async (req, res) => {
     try {
