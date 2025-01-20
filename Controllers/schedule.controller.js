@@ -35,7 +35,7 @@ module.exports = {
       console.log("Received classId:", classId);
 
       const schedules = await Schedule.find({
-        classId: mongoose.Types.ObjectId(classId),
+        classId:new mongoose.Types.ObjectId(classId),
       }).populate("classId");
       console.log("Fetched schedules:", schedules);
 
