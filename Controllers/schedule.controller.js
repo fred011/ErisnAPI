@@ -35,7 +35,7 @@ module.exports = {
       console.log("Received classId in request:", classId);
 
       // Ensure classId is an ObjectId if it isn't already
-      const objectClassId = mongoose.Types.ObjectId(classId);
+      const objectClassId = new mongoose.Types.ObjectId(classId);
 
       const schedules = await Schedule.find({
         classId: objectClassId,
