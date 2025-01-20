@@ -18,12 +18,10 @@ module.exports = {
       });
 
       const savedSchedule = await newSchedule.save();
-      res
-        .status(201)
-        .json({
-          message: "Schedule created successfully",
-          data: savedSchedule,
-        });
+      res.status(201).json({
+        message: "Schedule created successfully",
+        data: savedSchedule,
+      });
     } catch (error) {
       res.status(500).json({ message: "Error creating schedule", error });
     }
@@ -31,6 +29,7 @@ module.exports = {
 
   // Get schedule by class
   getScheduleWithClass: async (req, res) => {
+    console.log(req.params.id);
     try {
       const classId = req.params.id;
       const schedules = await Schedule.find({ class: classId });
