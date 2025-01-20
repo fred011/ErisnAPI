@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/create", createSchedule);
 router.get("/fetch-with-class/:id", getScheduleWithClass);
 router.get("/fetch/:id", fetchScheduleWithId);
-router.patch("/update/:id", updateScheduleWithId);
+router.post("/update/:id", updateScheduleWithId);
 router.delete("/delete/:id", deleteScheduleWithId);
 
 module.exports = router;
