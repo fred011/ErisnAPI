@@ -1,5 +1,5 @@
-const Schedule = require("../models/Schedule"); // Assuming Schedule model is defined
-const Class = require("../models/Class"); // Assuming Class model is defined
+const Schedule = require("../Models/schedule.model"); // Assuming Schedule model is defined
+const Class = require("../Models/class.model"); // Assuming Class model is defined
 
 // Create a new schedule
 exports.createSchedule = async (req, res) => {
@@ -56,12 +56,10 @@ exports.updateScheduleWithId = async (req, res) => {
       return res.status(404).json({ message: "Schedule not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Schedule updated successfully",
-        data: updatedSchedule,
-      });
+    res.status(200).json({
+      message: "Schedule updated successfully",
+      data: updatedSchedule,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error updating schedule", error });
   }
