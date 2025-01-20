@@ -31,25 +31,26 @@ module.exports = {
   // Get schedule by class
   getScheduleWithClass: async (req, res) => {
     try {
-      const classId = req.params.id; // Ensure this matches your frontend
-      console.log("Received classId in request:", classId);
+      const classId = req.params.id;
+      console.log("Class ID from request:", classId);
 
       const schedules = await Schedule.find({ classId }).populate("classId");
+      console.log("Query Result:", schedules);
 
       if (!schedules.length) {
+        console.log("No schedules found for class:", classId);
         return res
           .status(404)
           .json({ message: "No schedules found for this class." });
       }
 
-      console.log("Fetched schedules:", schedules);
       res.status(200).json({
         success: true,
         message: "Schedules retrieved successfully.",
         data: schedules,
       });
     } catch (error) {
-      console.error("Server Error in retrieving schedules:", error);
+      console.error("Error in fetching schedules:", error);
       res
         .status(500)
         .json({ message: "Server Error in retrieving schedules", error });
