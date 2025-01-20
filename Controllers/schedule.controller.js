@@ -31,15 +31,10 @@ module.exports = {
   // Get schedule by class
   getScheduleWithClass: async (req, res) => {
     try {
-      const classId = req.params.id;
+      const classId = req.params.id; // Ensure this matches your frontend
       console.log("Received classId in request:", classId);
 
-      // Ensure classId is an ObjectId if it isn't already
-      const objectClassId = new mongoose.Types.ObjectId(classId);
-
-      const schedules = await Schedule.find({
-        classId: objectClassId,
-      }).populate("classId");
+      const schedules = await Schedule.find({ classId }).populate("classId");
 
       if (!schedules.length) {
         return res
@@ -50,11 +45,11 @@ module.exports = {
       console.log("Fetched schedules:", schedules);
       res.status(200).json({
         success: true,
-        message: "Success in fetching all events.",
+        message: "Schedules retrieved successfully.",
         data: schedules,
       });
     } catch (error) {
-      console.log("Server Error in retrieving schedules", error);
+      console.error("Server Error in retrieving schedules:", error);
       res
         .status(500)
         .json({ message: "Server Error in retrieving schedules", error });
