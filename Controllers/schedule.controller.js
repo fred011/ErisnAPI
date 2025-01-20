@@ -34,8 +34,13 @@ module.exports = {
       const classId = req.params.id;
       console.log("Received classId:", classId);
 
+      if (!mongoose.Types.ObjectId.isValid(classId)) {
+        console.log("Invalid classId provided:", classId);
+        return res.status(400).json({ message: "Invalid classId provided." });
+      }
+
       const schedules = await Schedule.find({
-        classId:new mongoose.Types.ObjectId(classId),
+        classId: mongoose.Types.ObjectId(classId),
       }).populate("classId");
       console.log("Fetched schedules:", schedules);
 
