@@ -2,6 +2,7 @@ const Schedule = require("../Models/schedule.model"); // Assuming Schedule model
 const Class = require("../Models/class.model");
 const Student = require("../Models/student.model");
 const Exam = require("../Models/examination.model");
+const mongoose = require("mongoose");
 
 module.exports = {
   // Create a new schedule
