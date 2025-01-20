@@ -26,20 +26,20 @@ exports.createSchedule = async (req, res) => {
 // Get schedule by class
 exports.getScheduleWithClass = async (req, res) => {
   try {
-    const { classId } = req.params;
-    const schedules = await Schedule.find({ classId }).populate(
-      "teacher subject"
-    );
-
-    if (!schedules.length) {
-      return res
-        .status(404)
-        .json({ message: "No schedules found for the specified class" });
-    }
-
-    res.status(200).json({ schedules });
+    const classId = req.params.id;
+    const schedules = await Schedule.find({ class: classId });
+    res
+      .status(200)
+      .lson({
+        success: true,
+        message: "Success in fetching all events.",
+        data: schedules,
+      });
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving schedules", error });
+    console.log("Server Error in retrieving schedules", error);
+    res
+      .status(500)
+      .json({ message: "Server Error in retrieving schedules", error });
   }
 };
 
