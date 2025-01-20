@@ -1,17 +1,17 @@
-const express = require("express");
+// const express = require("express");
 
-const {
-  createSchedule,
-  getScheduleWithClass,
-  updateScheduleWithId,
-  deleteScheduleWithId,
-} = require("../Controllers/schedule.controller");
+// const {
+//   createSchedule,
+//   getScheduleWithClass,
+//   updateScheduleWithId,
+//   deleteScheduleWithId,
+// } = require("../Controllers/schedule.controller");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.post("/create", createSchedule);
-router.get("/fetch-with-class/:id", getScheduleWithClass);
-router.patch("/update/:id", updateScheduleWithId);
-router.delete("/delete/:id", deleteScheduleWithId);
+// router.post("/create", createSchedule);
+// router.get("/fetch-with-class/:id", getScheduleWithClass);
+// router.patch("/update/:id", updateScheduleWithId);
+// router.delete("/delete/:id", deleteScheduleWithId);
 
-module.exports = router;
+// module.exports = router;
