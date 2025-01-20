@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/create", createSchedule);
 router.get("/fetch-with-class/:id", getScheduleWithClass);
-router.patch("/fetch-with-id/:id", fetchScheduleWithId);
+router.patch("/fetch/:id", fetchScheduleWithId);
 router.patch("/update/:id", updateScheduleWithId);
 router.delete("/delete/:id", deleteScheduleWithId);
 
