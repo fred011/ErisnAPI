@@ -35,7 +35,7 @@ module.exports = {
         .json({ success: false, message: "Error in getting Atthendance" });
     }
   },
-  chechAttendance: async (req, res) => {
+  checkAttendance: async (req, res) => {
     const { classId } = req.params;
     try {
       const today = moment().startOf("day");
