@@ -7,9 +7,6 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
- 
-
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,6 +20,7 @@
     "express": "^4.21.1",
     "formidable": "^3.5.2",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "mongoose": "^8.8.3",
     "validator": "^13.12.0"
   },
