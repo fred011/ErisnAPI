@@ -31,11 +31,10 @@ app.use(cookieParser()); // Parse cookies from requests
 
 // Middleware to set a cookie with SameSite attribute
 app.use((req, res, next) => {
-  const isSecure = process.env.NODE_ENV === "production";
-  res.cookie("example_cookie", "cookie_value", {
+  res.cookie("token", token, {
     httpOnly: true,
-    secure: isSecure, // Secure cookie in production
-    sameSite: isSecure ? "None" : "Lax", // Cross-site requests allowed in production
+    secure: true, // Use HTTPS
+    sameSite: "None",
     path: "/",
   });
   next();
