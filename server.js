@@ -47,12 +47,10 @@ app.options("*", (req, res) => {
     "Access-Control-Allow-Origin",
     "https://erisn-sec-chance-program.vercel.app"
   );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // Allow specific methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Allow specific headers
+
   res.sendStatus(200);
 });
 
