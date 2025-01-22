@@ -85,7 +85,7 @@ module.exports = {
   getSingleClass: async (req, res) => {
     try {
       const classId = req.params.id;
-      const allClasses = await Class.find({ _id: classId }).populate(
+      const allClasses = await Class.findOne({ _id: classId }).populate(
         "attendee"
       );
       res.status(200).json({
