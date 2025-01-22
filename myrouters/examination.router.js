@@ -14,7 +14,7 @@ router.post("/create", newExamination);
 router.get("/all", getAllExaminations);
 router.get(
   "/class/:id",
-  authMiddleware(["TEACHER", "STUDENT"]),
+  authMiddleware(["TEACHER", "STUDENT", "ADMIN"]),
   getExaminationsByClass
 );
 router.post("/update/:id", updateExaminationWithId);
