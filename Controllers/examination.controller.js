@@ -10,11 +10,12 @@ module.exports = {
           message: "Missing required fields",
         });
       }
+
       const newExamination = new Examination({
         examDate: date,
-        subject: subjectId,
+        subject: subjectId, // Correctly mapped
         examType: examType,
-        class: classId,
+        class: classId, // Correctly mapped
       });
       const savedData = await newExamination.save();
       res.status(200).json({
