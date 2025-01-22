@@ -4,7 +4,7 @@ const {
   updateExamination,
   deleteExamination,
   getExaminationsByClass,
-} = require("../controllers/examinationController");
+} = require("../Controllers/examination.controller");
 
 const router = express.Router();
 

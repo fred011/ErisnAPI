@@ -1,4 +1,4 @@
-const Examination = require("../models/examinationModel");
+const Examination = require("../Models/examination.model");
 
 exports.createExamination = async (req, res) => {
   try {
@@ -36,12 +36,10 @@ exports.updateExamination = async (req, res) => {
       return res.status(404).json({ message: "Examination not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Examination updated successfully",
-        updatedExamination,
-      });
+    res.status(200).json({
+      message: "Examination updated successfully",
+      updatedExamination,
+    });
   } catch (error) {
     console.error("Error updating examination:", error);
     res.status(500).json({ message: "Failed to update examination" });
