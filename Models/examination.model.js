@@ -1,11 +1,24 @@
 const mongoose = require("mongoose");
 
 const examinationSchema = new mongoose.Schema({
-  // school: { type: mongoose.Schema.ObjectId, ref: "Erisn Africa" },
-  examDate: { type: Date, required: true },
-  subject: { type: mongoose.Schema.ObjectId, ref: "Subject" },
-  examType: { type: String, required: true },
-  class: { type: mongoose.Schema.ObjectId, ref: "Class" },
+  examDate: {
+    type: Date,
+    required: true,
+  },
+  subject: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Subject",
+    required: true,
+  },
+  examType: {
+    type: String,
+    required: true,
+  },
+  class: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Class",
+    required: true,
+  },
 
   createdAt: { type: Date, default: new Date() },
 });

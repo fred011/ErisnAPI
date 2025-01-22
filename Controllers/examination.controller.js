@@ -4,6 +4,12 @@ module.exports = {
   newExamination: async (req, res) => {
     try {
       const { date, subjectId, examType, classId } = req.body;
+      if (!date || !subjectId || !examType || !classId) {
+        return res.status(400).json({
+          success: false,
+          message: "Missing required fields",
+        });
+      }
       const newExamination = new Examination({
         examDate: date,
         subject: subjectId,
