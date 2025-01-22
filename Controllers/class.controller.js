@@ -82,4 +82,23 @@ module.exports = {
         .json({ success: false, message: "Server error in Deleting Class" });
     }
   },
+  getSingleClass: async (req, res) => {
+    try {
+      const classId = req.params.id;
+      const allClasses = await Class.find({ _id: classId }).populate(
+        "attendee"
+      );
+      res.status(200).json({
+        success: true,
+        message: "Successfully fetched single class ",
+        data: allClasses,
+      });
+    } catch (error) {
+      console.log("Get single class Error => ", error);
+      res.status(500).json({
+        success: false,
+        message: "Server error in fetching single class",
+      });
+    }
+  },
 };
