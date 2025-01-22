@@ -7,7 +7,7 @@ module.exports = {
       if (!date || !subjectId || !examType || !classId) {
         return res.status(400).json({
           success: false,
-          message: "Missing required fields",
+          message: "Missing some required fields",
         });
       }
 
