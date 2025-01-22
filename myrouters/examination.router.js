@@ -1,19 +1,16 @@
 const express = require("express");
-const authMiddleware = require("../Auth/auth");
 const {
-  newExamination,
-  getAllExaminations,
+  createExamination,
+  updateExamination,
+  deleteExamination,
   getExaminationsByClass,
-  updateExaminationWithId,
-  deleteExaminationWithId,
-} = require("../Controllers/examination.controller");
+} = require("../controllers/examinationController");
 
 const router = express.Router();
 
-router.post("/create", newExamination);
-router.get("/all", getAllExaminations);
-router.get("/class/:id", getExaminationsByClass);
-router.post("/update/:id", updateExaminationWithId);
-router.delete("/delete/:id", deleteExaminationWithId);
+router.post("/create", createExamination);
+router.put("/update/:id", updateExamination);
+router.delete("/delete/:id", deleteExamination);
+router.get("/class/:classId", getExaminationsByClass);
 
 module.exports = router;
