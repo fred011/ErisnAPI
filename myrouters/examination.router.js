@@ -12,11 +12,7 @@ const router = express.Router();
 
 router.post("/create", newExamination);
 router.get("/all", getAllExaminations);
-router.get(
-  "/class/:id",
-  authMiddleware(["TEACHER", "STUDENT", "ADMIN"]),
-  getExaminationsByClass
-);
+router.get("/class/:id", getExaminationsByClass);
 router.post("/update/:id", updateExaminationWithId);
 router.delete("/delete/:id", deleteExaminationWithId);
 
