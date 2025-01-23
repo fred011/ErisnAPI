@@ -13,6 +13,7 @@ const subjectRouter = require("./myrouters/subject.router");
 const scheduleRouter = require("./myrouters/schedule.router");
 const attendanceRouter = require("./myrouters/attendance.router");
 const examinationRouter = require("./myrouters/examination.router");
+const noticeRouter = require("./myrouters/notice.router");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -75,6 +76,7 @@ app.use("/api/subject", subjectRouter);
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/attendance", attendanceRouter);
 app.use("/api/examination", examinationRouter);
+app.use("/api/notice", noticeRouter);
 
 // Start server
 app.listen(PORT, () => {
