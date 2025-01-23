@@ -9,8 +9,7 @@ const examinationSchema = new mongoose.Schema({
     required: true,
   },
   class: { type: mongoose.Schema.Types.ObjectId, ref: "Class", required: true },
-
-  createdAt: { type: Date, default: new Date() },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Examination", examinationSchema);

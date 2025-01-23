@@ -13,18 +13,22 @@ module.exports = {
       const savedData = await newExamination.save();
       res.status(200).json({
         success: true,
-        message: "Success in creating new Examination",
+        message: "New examination created successfully.",
         data: savedData,
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ success: false, message: "Error in creating new examination" });
+      res.status(500).json({
+        success: false,
+        message: "Error creating new examination.",
+        error: error.message,
+      });
     }
   },
   getAllExaminations: async (req, res) => {
     try {
-      const examinations = await Examination.find();
+      const examinations = await Examination.find()
+        .populate("subject", "subject_name")
+        .populate("class", "class_text");
       res.status(200).json({
         success: true,
         examinations,
@@ -32,16 +36,17 @@ module.exports = {
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error in fetching all examinations",
+        message: "Error fetching all examinations.",
+        error: error.message,
       });
     }
   },
   getExaminationsByClass: async (req, res) => {
     try {
       const classId = req.params.id;
-      const examinations = await Examination.find({ class: classId }).populate(
-        "subject"
-      );
+      const examinations = await Examination.find({ class: classId })
+        .populate("subject", "subject_name")
+        .populate("class", "class_text");
       res.status(200).json({
         success: true,
         examinations,
@@ -49,7 +54,8 @@ module.exports = {
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error in fetching examinations",
+        message: "Error fetching examinations by class.",
+        error: error.message,
       });
     }
   },
@@ -58,39 +64,55 @@ module.exports = {
     try {
       const examinationId = req.params.id;
 
-      await Examination.findByIdAndUpdate(
-        { _id: examinationId },
+      const updatedExam = await Examination.findByIdAndUpdate(
+        examinationId,
         {
           $set: {
             examDate: date,
             subject: subjectId,
             examType: examType,
           },
-        }
+        },
+        { new: true }
       );
+      if (!updatedExam) {
+        return res.status(404).json({
+          success: false,
+          message: "Examination not found.",
+        });
+      }
       res.status(200).json({
         success: true,
-        message: "Success in updating Examination",
+        message: "Examination updated successfully.",
+        data: updatedExam,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error in updating examinations",
+        message: "Error updating examination.",
+        error: error.message,
       });
     }
   },
   deleteExaminationWithId: async (req, res) => {
     try {
       const examinationId = req.params.id;
-      await Examination.findOneAndDelete({ _id: examinationId });
+      const deletedExam = await Examination.findByIdAndDelete(examinationId);
+      if (!deletedExam) {
+        return res.status(404).json({
+          success: false,
+          message: "Examination not found.",
+        });
+      }
       res.status(200).json({
         success: true,
-        message: "Success in deleting Examination",
+        message: "Examination deleted successfully.",
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error in deleting examinations",
+        message: "Error deleting examination.",
+        error: error.message,
       });
     }
   },
