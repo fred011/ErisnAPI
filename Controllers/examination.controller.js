@@ -40,7 +40,9 @@ module.exports = {
   getExaminationsByClass: async (req, res) => {
     try {
       const classId = req.params.id;
-      const examinations = await Examination.find({ class: classId });
+      const examinations = await Examination.find({ class: classId }).populate(
+        "subject"
+      );
       res.status(200).json({
         success: true,
         examinations,
