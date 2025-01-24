@@ -102,7 +102,8 @@ const getTeachersWithQuery = async (req, res) => {
 };
 const getTeacherOwnData = async (req, res) => {
   try {
-    const teacher = await Teacher.findOne({}).select("-password");
+    const id = req.user.id;
+    const teacher = await Teacher.findOne({ _id: is }).select("-password");
     if (!teacher) {
       return res.status(404).json({
         success: false,
