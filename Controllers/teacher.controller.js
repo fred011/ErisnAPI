@@ -102,8 +102,8 @@ const getTeachersWithQuery = async (req, res) => {
 };
 const getTeacherOwnData = async (req, res) => {
   try {
-    const id = req.user.id;
-    const teacher = await Teacher.findOne({ _id: is }).select("-password");
+    const id = req.user.id; // Ensure req.user is populated (e.g., via middleware)
+    const teacher = await Teacher.findOne({ _id: id }).select("-password"); // Fix typo: 'is' -> 'id'
     if (!teacher) {
       return res.status(404).json({
         success: false,
@@ -123,7 +123,7 @@ const getTeacherOwnData = async (req, res) => {
 const updateTeacherData = async (req, res) => {
   try {
     const id = req.params.id;
-    const teacher = await Teacher.findOne({ _id: id }); // Fetch the only admin record
+    const teacher = await Teacher.findOne({ _id: id });
     if (!teacher) {
       return res.status(404).json({
         success: false,

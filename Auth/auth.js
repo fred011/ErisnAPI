@@ -1,32 +1,16 @@
-const jwt = require("jsonwebtoken");
+const express = require("express");
+const authMiddleware = require("./path/to/authMiddleware");
 
-const authMiddleware = (roles = []) => {
-  return (req, res, next) => {
-    try {
-      const token = req.header("Authorization")?.replace("Bearer ", "");
+const router = express.Router();
 
-      if (!token) {
-        return res
-          .status(401)
-          .json({ success: false, message: "No token provided." });
-      }
+router.get("/admin-data", authMiddleware(["admin"]), (req, res) => {
+  res.json({ success: true, message: "Welcome, admin!" });
+});
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-
-      if (roles.length > 0 && !roles.includes(req.user.role)) {
-        return res
-          .status(403)
-          .json({ success: false, message: "Access denied." });
-      }
-
-      next();
-    } catch (error) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid token." });
-    }
-  };
-};
-
-module.exports = authMiddleware;
+router.get(
+  "/teacher-data",
+  authMiddleware(["teacher", "admin"]),
+  (req, res) => {
+    res.json({ success: true, message: "Welcome, teacher or admin!" });
+  }
+);
