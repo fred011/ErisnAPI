@@ -98,7 +98,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/fetch-with-query", getTeachersWithQuery);
 router.patch("/update/:id", updateTeacherData);
-router.get("/fetch-single", authMiddleware(["teacher"]), getTeacherOwnData);
+router.get("/fetch-single", getTeacherOwnData);
 router.get("/fetch/:id", getTeacherWithId);
 router.delete("/delete/:id", deleteTeacherWithId);
 
