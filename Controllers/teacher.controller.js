@@ -102,22 +102,23 @@ const getTeachersWithQuery = async (req, res) => {
 };
 const getTeacherOwnData = async (req, res) => {
   try {
-    const teacher = await Teacher.findOne({}).select("-password"); // Fetch admin data excluding the password
+    const teacher = await Teacher.findOne({}).select("-password");
     if (!teacher) {
       return res.status(404).json({
         success: false,
         message: "Teacher data not found.",
       });
     }
-    res.status(200).json({ success: true, admin });
+    res.status(200).json({ success: true, teacher });
   } catch (error) {
-    console.error("Error fetching teacher  data:", error);
+    console.error("Error fetching teacher data:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error.",
     });
   }
 };
+
 const updateTeacherData = async (req, res) => {
   try {
     const id = req.params.id;
