@@ -52,6 +52,7 @@ app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // Allow specific methods
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Allow specific headers
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   res.sendStatus(200);
 });
