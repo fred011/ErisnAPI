@@ -45,16 +45,18 @@ app.use((req, res, next) => {
 
 // Handle Preflight Requests for Complex CORS
 app.options("*", (req, res) => {
+  const allowedOrigin = "https://erisn-sec-chance-program.vercel.app"; // Your frontend URL
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin); // Set the specific origin
   res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://erisn-sec-chance-program.vercel.app"
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, DELETE, OPTIONS"
+  ); // Allowed methods
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization" // Add headers explicitly used in your requests
   );
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // Allow specific methods
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Allow specific headers
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  res.sendStatus(200);
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials (cookies, auth headers)
+  res.sendStatus(200); // Respond to the preflight request
 });
 
 // Health check route
