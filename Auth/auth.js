@@ -1,16 +1,42 @@
-const express = require("express");
-const authMiddleware = require("./path/to/authMiddleware");
+const jwt = require("jsonwebtoken");
 
-const router = express.Router();
+const authMiddleware = (roles = []) => {
+  return (req, res, next) => {
+    try {
+      const authHeader = req.header("Authorization");
+      if (!authHeader) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Authorization header missing." });
+      }
 
-router.get("/admin-data", authMiddleware(["admin"]), (req, res) => {
-  res.json({ success: true, message: "Welcome, admin!" });
-});
+      const token = authHeader.split(" ")[1];
+      if (!token) {
+        return res
+          .status(401)
+          .json({ success: false, message: "No token provided." });
+      }
 
-router.get(
-  "/teacher-data",
-  authMiddleware(["teacher", "admin"]),
-  (req, res) => {
-    res.json({ success: true, message: "Welcome, teacher or admin!" });
-  }
-);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
+
+      if (roles.length > 0 && !roles.includes(req.user.role)) {
+        return res.status(403).json({
+          success: false,
+          message: `Access denied. Your role: ${
+            req.user.role
+          }. Required roles: ${roles.join(", ")}.`,
+        });
+      }
+
+      next();
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid token." });
+    }
+  };
+};
+
+module.exports = authMiddleware;
