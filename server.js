@@ -2,86 +2,59 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser"); // Add cookie parser for better cookie handling
-
-// Import Routes
-const adminRouter = require("./myrouters/admin.router");
-const teacherRouter = require("./myrouters/teacher.router");
-const studentRouter = require("./myrouters/student.router");
-const classRouter = require("./myrouters/class.router");
-const subjectRouter = require("./myrouters/subject.router");
-const scheduleRouter = require("./myrouters/schedule.router");
-const attendanceRouter = require("./myrouters/attendance.router");
-const examinationRouter = require("./myrouters/examination.router");
-const noticeRouter = require("./myrouters/notice.router");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS Configuration
-app.use(
-  cors({
-    origin: "https://erisn-sec-chance-program.vercel.app", // Frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Methods allowed
-    allowedHeaders: ["Content-Type", "Authorization"], // Headers allowed
-    credentials: true, // Allow credentials
-  })
-);
-
-app.use(express.json());
-app.use(cookieParser()); // Parse cookies from requests
-
-// Middleware to set a cookie with SameSite attribute
-app.use((req, res, next) => {
-  const isSecure = process.env.NODE_ENV === "production";
-  res.cookie("example_cookie", "cookie_value", {
-    httpOnly: true,
-    secure: isSecure, // Secure cookie in production
-    sameSite: isSecure ? "None" : "Lax", // Cross-site requests allowed in production
-    path: "/",
-  });
-  next();
-});
-
-// Handle Preflight Requests for Complex CORS
-app.options("*", (req, res) => {
-  const allowedOrigin = "https://erisn-sec-chance-program.vercel.app"; // Your frontend URL
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin); // Set the specific origin
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
-  ); // Allowed methods
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization" // Add headers explicitly used in your requests
-  );
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials (cookies, auth headers)
-  res.sendStatus(200); // Respond to the preflight request
-});
-
-// Health check route
-app.get("/", (req, res) => {
-  res.json({ message: "API is up and running!" });
-});
-
-// Connect to MongoDB
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
 
-// Use routes
-app.use("/api/admin", adminRouter);
-app.use("/api/teacher", teacherRouter);
-app.use("/api/student", studentRouter);
-app.use("/api/class", classRouter);
-app.use("/api/subject", subjectRouter);
-app.use("/api/schedule", scheduleRouter);
-app.use("/api/attendance", attendanceRouter);
-app.use("/api/examination", examinationRouter);
-app.use("/api/notice", noticeRouter);
+// CORS Configuration
+const corsOptions = {
+  origin: "https://erisn-sec-chance-program.vercel.app", // Frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  credentials: true, // Allow cookies and other credentials
+};
+app.use(cors(corsOptions));
 
-// Start server
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+
+// Health Check
+app.get("/", (req, res) => {
+  res.json({ message: "API is up and running!" });
+});
+
+// Example Middleware to Set a Secure Cookie
+app.use((req, res, next) => {
+  const isSecure = process.env.NODE_ENV === "production";
+  res.cookie("example_cookie", "cookie_value", {
+    httpOnly: true,
+    secure: isSecure, // Secure in production
+    sameSite: isSecure ? "None" : "Lax", // Cross-origin cookies in production
+    path: "/",
+  });
+  next();
+});
+
+// Routers
+app.use("/api/admin", require("./myrouters/admin.router"));
+app.use("/api/teacher", require("./myrouters/teacher.router"));
+app.use("/api/student", require("./myrouters/student.router"));
+app.use("/api/class", require("./myrouters/class.router"));
+app.use("/api/subject", require("./myrouters/subject.router"));
+app.use("/api/schedule", require("./myrouters/schedule.router"));
+app.use("/api/attendance", require("./myrouters/attendance.router"));
+app.use("/api/examination", require("./myrouters/examination.router"));
+app.use("/api/notice", require("./myrouters/notice.router"));
+
+// Start the Server
 app.listen(PORT, () => {
   console.log(`API is running live on port ${PORT}`);
 });
