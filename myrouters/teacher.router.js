@@ -20,13 +20,13 @@ router.post("/register", async (req, res) => {
 
     // Validate input
     if (!email || !name || !password) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({ error: "All fields are required." });
     }
 
     // Check if the email is already registered
     const existingTeacher = await Teacher.findOne({ email });
     if (existingTeacher) {
-      return res.status(409).json({ error: "Email is already registered" });
+      return res.status(409).json({ error: "Email is already registered." });
     }
 
     // Hash the password
@@ -48,58 +48,61 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Teacher registered successfully",
+      message: "Teacher registered successfully.",
       data: savedTeacher,
     });
   } catch (err) {
     console.error("Error registering teacher:", err);
     res
       .status(500)
-      .json({ error: "Failed to register teacher", details: err.message });
+      .json({ error: "Failed to register teacher.", details: err.message });
   }
 });
 
 // POST request to login a teacher
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     const teacher = await Teacher.findOne({ email });
     if (!teacher) {
-      return res.status(404).json({ error: "Teacher not found" });
+      return res.status(404).json({ error: "Teacher not found." });
     }
 
     // Compare password with the hashed password stored in the DB
     const isMatch = await bcrypt.compare(password, teacher.password);
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Invalid credentials." });
     }
 
     // Generate JWT token for the authenticated teacher
     const token = jwt.sign(
-      { id: teacher._id, email: teacher.email },
-      process.env.JWT_SECRET, // Make sure to set JWT_SECRET in your environment variables
-      { expiresIn: "1h" } // Token expires in 1 hour
+      { id: teacher._id, email: teacher.email, role: "TEACHER" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
 
-    // Send the response with the token
     res.status(200).json({
-      message: "Login successful",
-      teacher,
-      token: token, // Send token to the client
+      message: "Login successful.",
+      teacher: { id: teacher._id, email: teacher.email, name: teacher.name },
+      token,
     });
   } catch (err) {
     console.error("Error during login:", err);
     res
       .status(500)
-      .json({ error: "Internal server error", details: err.message });
+      .json({ error: "Internal server error.", details: err.message });
   }
 });
 
-router.get("/fetch-with-query", getTeachersWithQuery);
-router.patch("/update/:id", updateTeacherData);
-router.get("/fetch-single", getTeacherOwnData);
-router.get("/fetch/:id", getTeacherWithId);
-router.delete("/delete/:id", deleteTeacherWithId);
+router.get(
+  "/fetch-with-query",
+  authMiddleware(["TEACHER"]),
+  getTeachersWithQuery
+);
+router.patch("/update/:id", authMiddleware(["TEACHER"]), updateTeacherData);
+router.get("/fetch-single", authMiddleware(["TEACHER"]), getTeacherOwnData);
+router.get("/fetch/:id", authMiddleware(["TEACHER"]), getTeacherWithId);
+router.delete("/delete/:id", authMiddleware(["TEACHER"]), deleteTeacherWithId);
 
 module.exports = router;
