@@ -98,7 +98,7 @@ router.post("/login", async (req, res) => {
 
 router.get(
   "/fetch-with-query",
-  authMiddleware(["ADMIN", "SCHOOL"]),
+  authMiddleware(["ADMIN"]),
   getTeachersWithQuery
 ); // Protected
 router.get("/fetch-single", authMiddleware(["TEACHER"]), getTeacherOwnData); // Only teachers

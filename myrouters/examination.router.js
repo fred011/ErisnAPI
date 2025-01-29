@@ -11,8 +11,8 @@ const {
 const router = express.Router();
 
 router.post("/create", authMiddleware(["TEACHER", "ADMIN"]), newExamination); // Only teachers & admins
-router.get("/all", authMiddleware(), getAllExaminations); // Protected
-router.get("/class/:id", authMiddleware(), getExaminationsByClass); // Protected
+router.get("/all", getAllExaminations); // Protected
+router.get("/class/:id", getExaminationsByClass); // Protected
 router.patch(
   "/update/:id",
   authMiddleware(["TEACHER", "ADMIN"]),
