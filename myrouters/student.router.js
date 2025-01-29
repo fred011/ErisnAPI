@@ -95,10 +95,22 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/fetch-with-query", getStudentsWithQuery);
-router.patch("/update/:id", updateStudentData);
-router.get("/fetch-single", getStudentOwnData);
-router.get("/fetch/:id", getStudentWithId);
-router.delete("/delete/:id", deleteStudentWithId);
+router.get(
+  "/fetch-with-query",
+  authMiddleware(["ADMIN", "TEACHER"]),
+  getStudentsWithQuery
+); // Protected
+router.get("/fetch-single", authMiddleware(["STUDENT"]), getStudentOwnData); // Only students can access their own data
+router.get(
+  "/fetch/:id",
+  authMiddleware(["ADMIN", "TEACHER"]),
+  getStudentWithId
+); // Protected
+router.patch(
+  "/update/:id",
+  authMiddleware(["ADMIN", "STUDENT"]),
+  updateStudentData
+); // Admins & students can update
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteStudentWithId); // Only admins can delete
 
 module.exports = router;

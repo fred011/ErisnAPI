@@ -1,5 +1,5 @@
 const express = require("express");
-
+const authMiddleware = require("../Auth/auth");
 const {
   createSchedule,
   getScheduleWithClass,
@@ -10,10 +10,14 @@ const {
 
 const router = express.Router();
 
-router.post("/create", createSchedule);
-router.get("/fetch-with-class/:id", getScheduleWithClass);
-router.get("/fetch/:id", fetchScheduleWithId);
-router.post("/update/:id", updateScheduleWithId);
-router.delete("/delete/:id", deleteScheduleWithId);
+router.post("/create", authMiddleware(["ADMIN", "TEACHER"]), createSchedule); // Requires admin or teacher
+router.get("/fetch-with-class/:id", getScheduleWithClass); // Public or no specific role needed
+router.get("/fetch/:id", fetchScheduleWithId); // Public or no specific role needed
+router.post(
+  "/update/:id",
+  authMiddleware(["ADMIN", "TEACHER"]),
+  updateScheduleWithId
+); // Requires admin or teacher
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteScheduleWithId); // Requires admin
 
 module.exports = router;

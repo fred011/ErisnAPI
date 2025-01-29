@@ -1,5 +1,5 @@
 const express = require("express");
-
+const authMiddleware = require("../Auth/auth");
 const {
   createSubject,
   getAllSubjects,
@@ -9,9 +9,13 @@ const {
 
 const router = express.Router();
 
-router.post("/create", createSubject);
-router.get("/all", getAllSubjects);
-router.patch("/update/:id", updateSubjectWithId);
-router.delete("/delete/:id", deleteSubjectWithId);
+router.post("/create", authMiddleware(["ADMIN", "TEACHER"]), createSubject); // Requires admin or teacher
+router.get("/all", getAllSubjects); // Public or no specific role needed
+router.patch(
+  "/update/:id",
+  authMiddleware(["ADMIN", "TEACHER"]),
+  updateSubjectWithId
+); // Requires admin or teacher
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteSubjectWithId); // Requires admin
 
 module.exports = router;

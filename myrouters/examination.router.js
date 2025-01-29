@@ -1,5 +1,5 @@
 const express = require("express");
-
+const authMiddleware = require("../Auth/auth");
 const {
   newExamination,
   getAllExaminations,
@@ -10,10 +10,18 @@ const {
 
 const router = express.Router();
 
-router.post("/create", newExamination);
-router.get("/all", getAllExaminations);
-router.get("/class/:id", getExaminationsByClass);
-router.patch("/update/:id", updateExaminationWithId);
-router.delete("/delete/:id", deleteExaminationWithId);
+router.post("/create", authMiddleware(["TEACHER", "ADMIN"]), newExamination); // Only teachers & admins
+router.get("/all", authMiddleware(), getAllExaminations); // Protected
+router.get("/class/:id", authMiddleware(), getExaminationsByClass); // Protected
+router.patch(
+  "/update/:id",
+  authMiddleware(["TEACHER", "ADMIN"]),
+  updateExaminationWithId
+);
+router.delete(
+  "/delete/:id",
+  authMiddleware(["ADMIN"]),
+  deleteExaminationWithId
+); // Only admins can delete
 
 module.exports = router;

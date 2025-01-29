@@ -96,10 +96,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/fetch-with-query", getTeachersWithQuery);
-router.patch("/update/:id", updateTeacherData);
-router.get("/fetch-single", authMiddleware(), getTeacherOwnData);
-router.get("/fetch/:id", getTeacherWithId);
-router.delete("/delete/:id", deleteTeacherWithId);
+router.get(
+  "/fetch-with-query",
+  authMiddleware(["ADMIN", "SCHOOL"]),
+  getTeachersWithQuery
+); // Protected
+router.get("/fetch-single", authMiddleware(["TEACHER"]), getTeacherOwnData); // Only teachers
+router.get("/fetch/:id", authMiddleware(["ADMIN", "SCHOOL"]), getTeacherWithId); // Protected
+router.patch(
+  "/update/:id",
+  authMiddleware(["TEACHER", "ADMIN"]),
+  updateTeacherData
+); // Teachers can update themselves, admins can update anyone
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteTeacherWithId); // Only admins can delete
 
 module.exports = router;

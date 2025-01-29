@@ -1,4 +1,5 @@
 const express = require("express");
+const authMiddleware = require("../Auth/auth");
 const {
   createNotice,
   getAllNotices,
@@ -8,9 +9,9 @@ const {
 
 const router = express.Router();
 
-router.post("/create", createNotice);
-router.get("/all", getAllNotices);
-router.patch("/update/:id", updateNoticeWithId);
-router.delete("/delete/:id", deleteNoticeWithId);
+router.post("/create", authMiddleware(["ADMIN"]), createNotice); // Requires admin
+router.get("/all", getAllNotices); // Public or no specific role needed
+router.patch("/update/:id", authMiddleware(["ADMIN"]), updateNoticeWithId); // Requires admin
+router.delete("/delete/:id", authMiddleware(["ADMIN"]), deleteNoticeWithId); // Requires admin
 
 module.exports = router;
