@@ -1,6 +1,52 @@
 const Teacher = require("../Models/teacher.model");
 const bcrypt = require("bcryptjs");
 
+///////
+const loginTeacher = async (req, res) => {
+  try {
+    const { email, password } = req.body; // Extract login credentials from the request
+    const teacher = await Teacher.findOne(); // Fetch the only admin record
+
+    // Check if the provided email matches the registered admin
+    if (!teacher || teacher.email !== email) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or teacher not found.",
+      });
+    }
+
+    // Verify the provided password against the hashed password
+    const isAuth = await bcrypt.compare(password, teacher.password); // Using async bcrypt.compare
+    if (!isAuth) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password.",
+      });
+    }
+
+    // Generate a JWT token with a validity of 1 hour
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = jwt.sign({ id: teacher._id, role: "TEACHER" }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    // Respond with the token and admin details
+    res.header("Authorization", token);
+    res.status(200).json({
+      success: true,
+      message: "Login successful.",
+      token,
+      admin: { name: teacher.name, email: teacher.email },
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+///////
 // Fetch teachers with optional search filter
 const getTeachersWithQuery = async (req, res) => {
   try {
@@ -98,6 +144,7 @@ const getTeacherWithId = async (req, res) => {
 };
 
 module.exports = {
+  loginTeacher,
   getTeachersWithQuery,
   getTeacherOwnData,
   updateTeacherData,

@@ -7,9 +7,11 @@ const {
   updateTeacherData,
   deleteTeacherWithId,
   getTeacherWithId,
+  loginTeacher,
 } = require("../Controllers/teacher.controller");
 
 // Routes
+router.post("/login", loginTeacher);
 router.get("/fetch-with-query", getTeachersWithQuery);
 router.patch("/update/:id", updateTeacherData);
 router.get("/fetch-single", authMiddleware(), getTeacherOwnData);
