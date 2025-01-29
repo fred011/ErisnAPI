@@ -102,7 +102,7 @@ router.get(
   getTeachersWithQuery
 ); // Protected
 router.get("/fetch-single", authMiddleware(["TEACHER"]), getTeacherOwnData); // Only teachers
-router.get("/fetch/:id", authMiddleware(["ADMIN", "SCHOOL"]), getTeacherWithId); // Protected
+router.get("/fetch/:id", authMiddleware(["ADMIN"]), getTeacherWithId); // Protected
 router.patch(
   "/update/:id",
   authMiddleware(["TEACHER", "ADMIN"]),
