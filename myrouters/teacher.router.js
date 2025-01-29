@@ -11,9 +11,9 @@ const {
 
 // Routes
 router.get("/fetch-with-query", getTeachersWithQuery);
-router.patch("/update/:id", authMiddleware(), updateTeacherData);
+router.patch("/update/:id", updateTeacherData);
 router.get("/fetch-single", authMiddleware(), getTeacherOwnData);
-router.get("/fetch/:id", authMiddleware(), getTeacherWithId);
-router.delete("/delete/:id", authMiddleware(), deleteTeacherWithId);
+router.get("/fetch/:id", getTeacherWithId);
+router.delete("/delete/:id", deleteTeacherWithId);
 
 module.exports = router;
