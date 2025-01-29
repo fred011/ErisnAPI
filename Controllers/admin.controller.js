@@ -98,9 +98,13 @@ module.exports = {
 
       // Generate a JWT token with a validity of 1 hour
       const jwtSecret = process.env.JWT_SECRET;
-      const token = jwt.sign({ id: admin._id, role: "ADMIN" }, jwtSecret, {
-        expiresIn: "1h",
-      });
+      const token = jwt.sign(
+        { id: admin._id, email: admin.email, role: "ADMIN" },
+        jwtSecret,
+        {
+          expiresIn: "1h",
+        }
+      );
 
       // Respond with the token and admin details
       res.header("Authorization", token);
