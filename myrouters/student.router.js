@@ -9,62 +9,11 @@ const {
   getStudentOwnData,
   getStudentWithId,
   deleteStudentWithId,
+  registerStudent,
 } = require("../Controllers/student.controller");
 
 // POST request to register a student
-router.post("/register", async (req, res) => {
-  try {
-    const {
-      email,
-      name,
-      student_class,
-      age,
-      gender,
-      guardian,
-      guardian_phone,
-      password,
-    } = req.body;
-
-    // Validate input
-    if (!email || !name || !password) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
-    // Check if the email is already registered
-    const existingStudent = await Student.findOne({ email });
-    if (existingStudent) {
-      return res.status(409).json({ error: "Email is already registered" });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new student record
-    const newStudent = new Student({
-      email,
-      name,
-      student_class,
-      age,
-      gender,
-      guardian,
-      guardian_phone,
-
-      password: hashedPassword,
-    });
-
-    // Save the student to the database
-    const savedStudent = await newStudent.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Student registered successfully",
-      data: savedStudent,
-    });
-  } catch (err) {
-    console.error("Error registering student:", err.message);
-    res.status(500).json({ error: "Failed to register student" });
-  }
-});
+router.post("/register", registerStudent);
 
 // POST request to login a student
 router.post("/login", async (req, res) => {
@@ -82,7 +31,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: student._id, email: student.email },
+      { id: student._id, email: student.email, role: "STUDENT" },
       process.env.JWT_SECRET, // Make sure to set JWT_SECRET in your environment variables
       { expiresIn: "1h" } // Token expires in 1 hour
     );

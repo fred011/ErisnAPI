@@ -77,7 +77,7 @@ router.post("/login", async (req, res) => {
 
     // Generate JWT token for the authenticated teacher
     const token = jwt.sign(
-      { id: teacher._id, email: teacher.email },
+      { id: teacher._id, email: teacher.email, role: "TEACHER" },
       process.env.JWT_SECRET, // Make sure to set JWT_SECRET in your environment variables
       { expiresIn: "1h" } // Token expires in 1 hour
     );
