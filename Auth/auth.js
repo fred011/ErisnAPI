@@ -16,6 +16,8 @@ const authMiddleware = (roles = []) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
 
+      console.log("Decoded User:", req.user); // Debugging output
+
       // Role-based authorization check
       if (roles.length > 0 && !roles.includes(req.user.role)) {
         return res
