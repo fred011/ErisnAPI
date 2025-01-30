@@ -104,7 +104,7 @@ module.exports = {
   getAttendeeClass: async (req, res) => {
     try {
       const attendeeId = req.user.id;
-      const classes = await Class.findOne({ attendee: attendeeId });
+      const classes = await Class.find({ attendee: attendeeId });
       res.status(200).json({
         success: true,
         message: "Successfully fetched attendee class ",
