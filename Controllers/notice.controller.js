@@ -16,6 +16,42 @@ module.exports = {
         .json({ success: false, message: "Server error in fetching Notices" });
     }
   },
+  getTeacherNotices: async (req, res) => {
+    try {
+      const allNotices = await Notice.find({ audience: "teacher" });
+      res.status(200).json({
+        success: true,
+        message: "Successfully fetched all Teacher Notices ",
+        data: allNotices,
+      });
+    } catch (error) {
+      console.log("Get all notices Error => ", error);
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Server error in fetching Teacher Notices",
+        });
+    }
+  },
+  getStudentNotices: async (req, res) => {
+    try {
+      const allNotices = await Notice.find({ audience: "student" });
+      res.status(200).json({
+        success: true,
+        message: "Successfully fetched all Student Notices ",
+        data: allNotices,
+      });
+    } catch (error) {
+      console.log("Get all notices Error => ", error);
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Server error in fetching Student Notices",
+        });
+    }
+  },
   createNotice: async (req, res) => {
     try {
       const { title, message, audience } = req.body;
