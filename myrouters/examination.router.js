@@ -10,14 +10,10 @@ const {
 
 const router = express.Router();
 
-router.post("/create", authMiddleware(["TEACHER", "ADMIN"]), newExamination); // Only teachers & admins
-router.get("/all", getAllExaminations); // Protected
-router.get("/class/:id", getExaminationsByClass); // Protected
-router.patch(
-  "/update/:id",
-  authMiddleware(["TEACHER", "ADMIN"]),
-  updateExaminationWithId
-);
+router.post("/create", authMiddleware(["ADMIN"]), newExamination); // Only teachers & admins
+router.get("/all", authMiddleware(), getAllExaminations); // Protected
+router.get("/class/:id", authMiddleware(), getExaminationsByClass); // Protected
+router.patch("/update/:id", authMiddleware(["ADMIN"]), updateExaminationWithId);
 router.delete(
   "/delete/:id",
   authMiddleware(["ADMIN"]),
