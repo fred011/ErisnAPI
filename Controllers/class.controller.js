@@ -101,4 +101,21 @@ module.exports = {
       });
     }
   },
+  getAttendeeClass: async (req, res) => {
+    try {
+      const attendeeId = req.params.id;
+      const classes = await Class.findOne({ attendee: attendeeId });
+      res.status(200).json({
+        success: true,
+        message: "Successfully fetched attendee class ",
+        data: classes,
+      });
+    } catch (error) {
+      console.log("Get single class Error => ", error);
+      res.status(500).json({
+        success: false,
+        message: "Server error in fetching attendee class",
+      });
+    }
+  },
 };
