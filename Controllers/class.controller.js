@@ -103,7 +103,7 @@ module.exports = {
   },
   getAttendeeClass: async (req, res) => {
     try {
-      const attendeeId = req.params.id;
+      const attendeeId = req.user.id;
       const classes = await Class.findOne({ attendee: attendeeId });
       res.status(200).json({
         success: true,
