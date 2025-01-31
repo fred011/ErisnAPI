@@ -37,7 +37,7 @@ module.exports = {
     }
   },
   checkAttendance: async (req, res) => {
-    const { classId } = req.params;
+    // const { classId } = req.params;
     try {
       const today = moment().startOf("day");
       const attendanceForToday = await Attendance.findOne({
