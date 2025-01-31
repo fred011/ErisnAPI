@@ -5,7 +5,7 @@ const attendanceSchema = new mongoose.Schema({
   student: { type: mongoose.Schema.ObjectId, ref: "Student" },
   class: { type: mongoose.Schema.ObjectId, ref: "Class" },
   date: { type: Date, required: true },
-  status: { type: String, enum: ["Present", "Absent"], default: "Absent" },
+  status: { type: String, enum: ["present", "absent"], default: "absent" },
 
   createdAt: { type: Date, default: new Date() },
 });

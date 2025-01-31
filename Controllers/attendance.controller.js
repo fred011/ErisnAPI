@@ -16,6 +16,7 @@ module.exports = {
       await newAttendance.save();
       res.status(201).json(newAttendance);
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ success: false, message: "Error in marking Atthendance" });
