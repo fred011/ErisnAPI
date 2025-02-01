@@ -25,24 +25,31 @@ module.exports = {
   getAttendance: async (req, res) => {
     try {
       const { studentId } = req.params;
-  
+
       // Fetch attendance records, ensuring we only get necessary fields and populate student data
       const attendance = await Attendance.find({ student: studentId })
-        .select('date status') // Select only necessary fields
-        .populate('student');
-  
+        .select("date status") // Select only necessary fields
+        .populate("student");
+
       // Check if attendance data is available
       if (!attendance || attendance.length === 0) {
-        return res.status(404).json({ success: false, message: "No attendance data found for this student." });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "No attendance data found for this student.",
+          });
       }
-  
+
       res.status(200).json(attendance);
     } catch (error) {
       console.error("Error in getting attendance:", error);
-      res.status(500).json({ success: false, message: "Error in getting attendance data." });
+      res
+        .status(500)
+        .json({ success: false, message: "Error in getting attendance data." });
     }
-  }
-  
+  },
+
   checkAttendance: async (req, res) => {
     // const { classId } = req.params;
     try {
