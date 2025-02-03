@@ -18,12 +18,12 @@ mongoose
 
 // CORS Configuration
 const corsOptions = {
-  origin: "https://erisn-sec-chance-program.vercel.app", // Frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-  credentials: true, // Allow cookies and other credentials
+  origin: ["https://erisn-sec-chance-program.vercel.app"], // Allow frontend URL
+  methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true, // Allow cookies and credentials
 };
-app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight requests
 
 // Middleware
 app.use(express.json());
