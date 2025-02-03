@@ -121,7 +121,9 @@ const getStudentsWithQuery = async (req, res) => {
 };
 const getStudentOwnData = async (req, res) => {
   try {
-    const student = await Student.findById(req.user.id).select("-password");
+    const student = await Student.findById(req.user.id)
+      .select("-password")
+      .populate("student_class");
     if (!student) {
       return res.status(404).json({ error: "Student data not found." });
     }
