@@ -23,6 +23,7 @@ module.exports = {
     }
   },
   getAttendance: async (req, res) => {
+    console.log("Called attendance");
     try {
       const { studentId } = req.params;
 
@@ -33,12 +34,10 @@ module.exports = {
 
       // Check if attendance data is available
       if (!attendance || attendance.length === 0) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "No attendance data found for this student.",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "No attendance data found for this student.",
+        });
       }
 
       res.status(200).json(attendance);
