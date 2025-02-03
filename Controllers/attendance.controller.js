@@ -27,10 +27,10 @@ module.exports = {
     try {
       const { studentId } = req.params;
 
-      // Fetch attendance records, ensuring we only get necessary fields and populate student data
+      // Fetch attendance records, ensuring we only get necessary fields and populate student data (including name)
       const attendance = await Attendance.find({ student: studentId })
-        .select("date status") // Select only necessary fields
-        .populate("student");
+        .select("date status") // Select only necessary fields from attendance
+        .populate("student", "name"); // Populate only the 'name' field of the student
 
       // Check if attendance data is available
       if (!attendance || attendance.length === 0) {
@@ -40,12 +40,20 @@ module.exports = {
         });
       }
 
-      res.status(200).json(attendance);
+      // Include the student's name in the response for each attendance record
+      const responseData = attendance.map((record) => ({
+        date: record.date,
+        status: record.status,
+        studentName: record.student ? record.student.name : "Unknown", // Fallback if student name is not found
+      }));
+
+      res.status(200).json(responseData);
     } catch (error) {
       console.error("Error in getting attendance:", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Error in getting attendance data." });
+      res.status(500).json({
+        success: false,
+        message: "Error in getting attendance data.",
+      });
     }
   },
 
