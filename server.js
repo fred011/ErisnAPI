@@ -18,11 +18,13 @@ mongoose
 
 // CORS Configuration
 const corsOptions = {
-  origin: ["https://erisn-sec-chance-program.vercel.app"], // Allow frontend URL
-  methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
-  allowedHeaders: "Content-Type,Authorization",
-  credentials: true, // Allow cookies and credentials
+  origin: "https://erisn-sec-chance-program.vercel.app", // Frontend URL
+  methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+  credentials: true, // Allow credentials (cookies, etc.)
 };
+
+app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // Handle preflight requests
 
 // Middleware
@@ -47,26 +49,6 @@ app.use((req, res, next) => {
 });
 
 // Verify Token Route
-app.post("/api/verify-token", (req, res) => {
-  try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-
-    if (!token) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided." });
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    return res.status(200).json({ success: true, valid: true, user: decoded });
-  } catch (error) {
-    return res
-      .status(401)
-      .json({ success: false, valid: false, message: "Invalid token." });
-  }
-});
 
 // Routers
 app.use("/api/auth", authRoutes);
