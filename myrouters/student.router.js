@@ -20,26 +20,39 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    // Find student by email
     const student = await Student.findOne({ email });
     if (!student) {
       return res.status(404).json({ error: "Student not found" });
     }
 
+    // Compare password with the stored hash
     const isMatch = await bcrypt.compare(password, student.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
+    // Check if JWT_SECRET is set
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: "JWT_SECRET is not set" });
+    }
+
+    // Generate JWT token
     const token = jwt.sign(
       { id: student._id, email: student.email, role: "STUDENT" },
-      process.env.JWT_SECRET, // Make sure to set JWT_SECRET in your environment variables
+      process.env.JWT_SECRET, // Ensure JWT_SECRET is in your environment variables
       { expiresIn: "1h" } // Token expires in 1 hour
     );
 
-    res
-      .status(200)
-      .json({ message: "Login successful", student, token: token });
+    // Send successful response with token
+    res.status(200).json({ message: "Login successful", student, token });
   } catch (err) {
+    console.error("Error during login:", err); // Log the error
     res.status(500).json({ error: "Internal server error" });
   }
 });
