@@ -121,20 +121,14 @@ const getStudentsWithQuery = async (req, res) => {
 };
 const getStudentOwnData = async (req, res) => {
   try {
-    const student = await Student.findOne({}).select("-password"); // Fetch admin data excluding the password
+    const student = await Student.findById(req.user.id).select("-password");
     if (!student) {
-      return res.status(404).json({
-        success: false,
-        message: "Student data not found.",
-      });
+      return res.status(404).json({ error: "Student data not found." });
     }
-    res.status(200).json({ success: true, admin });
+    res.status(200).json({ success: true, student });
   } catch (error) {
-    console.error("Error fetching student  data:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error.",
-    });
+    console.error("Error fetching student data:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 const updateStudentData = async (req, res) => {
