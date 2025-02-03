@@ -3,9 +3,12 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const authRoutes = require("./myrouters/auth.router");
 
 // MongoDB Connection
 mongoose
@@ -43,7 +46,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// Verify Token Route
+app.post("/api/verify-token", (req, res) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No token provided." });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    return res.status(200).json({ success: true, valid: true, user: decoded });
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ success: false, valid: false, message: "Invalid token." });
+  }
+});
+
 // Routers
+app.use("/api/auth", authRoutes);
 app.use("/api/admin", require("./myrouters/admin.router"));
 app.use("/api/teacher", require("./myrouters/teacher.router"));
 app.use("/api/student", require("./myrouters/student.router"));
