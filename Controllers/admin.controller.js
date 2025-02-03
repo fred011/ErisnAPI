@@ -147,6 +147,7 @@ module.exports = {
     }
   },
   getAdminOwnData: async (req, res) => {
+    console.log("Called");
     try {
       const admin = await Admin.findById(req.user.id).select("-password");
       if (!admin) {
