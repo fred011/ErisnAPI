@@ -25,7 +25,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Handle preflight requests
 
 // Middleware
 app.use(express.json());
@@ -49,6 +48,26 @@ app.use((req, res, next) => {
 });
 
 // Verify Token Route
+app.post("/api/verify-token", (req, res) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No token provided." });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    return res.status(200).json({ success: true, valid: true, user: decoded });
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ success: false, valid: false, message: "Invalid token." });
+  }
+});
 
 // Routers
 app.use("/api/auth", authRoutes);
