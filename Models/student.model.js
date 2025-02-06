@@ -11,7 +11,10 @@ const studentSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   guardian: { type: String, required: true },
   guardian_phone: { type: String, required: true },
+
   password: { type: String, required: true },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 
   createAt: { type: Date, default: new Date() },
 });

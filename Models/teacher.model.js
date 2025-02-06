@@ -8,6 +8,9 @@ const teacherSchema = new mongoose.Schema({
   gender: { type: String },
   phone_number: { type: String },
   password: { type: String, required: true },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
+
   createdAt: { type: Date, default: Date.now },
 });
 
